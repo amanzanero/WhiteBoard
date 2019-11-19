@@ -159,9 +159,67 @@ public class DatabaseConnect {
 		return success==true?true:false;
 	} 
 
-	public static void updateUser(String userName, String queueInsert)
+	public static void updateUserQueueInfo(String userName, String queueName)
 	{
-
+		if(userName == null || userName.isEmpty())
+		{
+			return;
+		}
+		else {
+			Connection conn = null;
+			PreparedStatement ps = null;
+			PreparedStatement ps2 = null;
+			PreparedStatement ps3 = null;
+			ResultSet rs = null;
+			ResultSet rs2 = null;
+			try
+			{
+				conn = DriverManager.getConnection(SQL_Connection);
+				ps= conn.prepareStatement("SELECT * FROM Users WHERE username=?");
+				ps.setString(1,userName);
+				rs = ps.executeQuery();
+			
+				if(rs.next())
+				{
+					ps2 = conn.prepareStatement("Select * from Queues WHERE queueName=?");
+					ps2.setString(1, queueName);
+					rs2 = ps2.executeQuery();
+					//checks if the queue given exists
+					if(rs2.next())
+					{
+						String queuesIn = rs.getString("queuesWaitingIn");
+						int numQueues = rs.getInt("numQueuesIn");
+						numQueues += 1;
+						queuesIn += queueName +",";
+						ps3 = conn.prepareStatement("UPDATE Users SET queuesWaitingIn=? , numQueuesIn=? WHERE userName=?");
+						ps3.setString(1, queuesIn);
+						ps3.setInt(2, numQueues);
+						ps3.setString(3, userName);
+						ps3.executeUpdate();
+					}
+				}
+			}
+			catch(SQLException e)
+			 {
+				 System.out.println(e.getMessage());
+			 } 
+			 finally 
+			 {
+				try 
+				{
+					 if(rs != null) rs.close();
+					 if(rs2 != null) rs2.close();
+					 if(ps != null) ps.close();
+					 if(ps2 != null) ps2.close();
+					 if(ps3 != null) ps3.close();
+					 if (conn != null) conn.close();
+				 } 
+				 catch (SQLException sqle) 
+				 {
+					 System.out.println(sqle.getMessage());
+				 }
+			 }
+		}
 	}
 
 //deletes user from database if it exists
