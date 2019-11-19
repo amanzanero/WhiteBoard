@@ -134,7 +134,7 @@ public class DatabaseConnect {
 			
 			try {
 				pst = establishConnection().prepareStatement("INSERT INTO Users(userName, hashedPass,numQueuesIn,queuesWaitingIn,isAdminOf"+
-			") VALUES(?,?,0,'',''");
+			") VALUES(?,?,0,'','')");
 				pst.setString(1,username);
 				pst.setString(2, insertPassword);
 				pst.executeUpdate();
