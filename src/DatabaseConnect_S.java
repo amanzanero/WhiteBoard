@@ -147,6 +147,26 @@ public class DatabaseConnect {
 		else {return -1;}
 	}
 	
+	public static boolean queueExists(String queueName) {
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		boolean success = true;
+		try {
+			conn = DriverManager.getConnection();
+			pst = conn.prepareStatement("SELECT * FROM Queues WHERE queueName = ?;");
+			pst.setString(1, queueName);
+			rs = pst.executeQuery();
+			if(!rs.next()) {
+				success= false;
+			}
+			
+		}catch(SQLException sqle) {
+			System.out.println(sqle.getMessage());
+		}finally {terminateConnection(conn,rs,pst);}
+		return success;
+	}
+	
 	
 	
 	
