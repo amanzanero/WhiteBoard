@@ -319,8 +319,10 @@ public class DatabaseConnect {
 
     public static void setAdminString(String queueName, String newString) {
 		PreparedStatement pst = null;
+		Connection conn = null;
 		try {
-			pst = establishConnection().prepareStatement("UPDATE Queues SET adminList=? WHERE queueName=?");
+			conn = DriverManager.getConnection(SQL_Connection);
+			pst = conn.prepareStatement("UPDATE Queues SET adminList=? WHERE queueName=?");
 			pst.setString(1, newString);
 			pst.setString(2, queueName);
 			pst.executeUpdate();
