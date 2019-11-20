@@ -1,5 +1,6 @@
 
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -333,18 +334,20 @@ public class DatabaseConnect {
 		}
 	}
 
+	//returns null if not found, admin string otherwise
     public static String getAdminString(String queueName) {
+		String unparsedOrder=null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
-		String unparsedOrder=null;
+		Connection conn = null;
 		try {
-			pst = establishConnection().prepareStatement("SELECT  FROM Queues WHERE queueName=?");
+			conn = DriverManager.getConnection(SQL_Connection);
+			pst = conn.prepareStatement("SELECT* FROM Queues WHERE queueName=?");
 			pst.setString(1, queueName);
 			rs = pst.executeQuery();
-			if(!rs.next()) {
-				return null;//if nothing found return null
+			if(rs.next()) {
+				unparsedOrder = rs.getString("adminList");
 			}
-			unparsedOrder = rs.toString();
 			
 		}catch(SQLException sqle) {
 			System.out.println(sqle.getMessage());
