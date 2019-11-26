@@ -1,0 +1,108 @@
+/*
+       document : login-register.css
+     created on : 2019 november 3, 11:10 am (sunday)
+         author : audrey bongalon
+      USC email : bongalon@usc.edu
+         USC ID : 9152272619
+    description : csci201 hw3 - stylesheet for login page and registration page
+
+                                        88
+                                        88
+                                        88
+      ,adPPYYba,  88       88   ,adPPYb,88  8b,dPPYba,   ,adPPYba,  8b       d8
+      ""     `Y8  88       88  a8"    `Y88  88P'   "Y8  a8P,,,,,88  `8b     d8'
+      ,adPPPPP88  88       88  8b      :88  88          8PP"""""""   `8b   d8'
+      88,    ,88  "8a,   ,a88  "8a,   ,d88  88          "8b,   ,aa    `8b,d8'
+      `"8bbdP"Y8   `"YbbdP'Y8   `"8bbdP"Y8  88           `"Ybbd8"'      Y88'
+                                                                        d8'
+                                                                       d8'
+*/
+
+
+/* form (the one in the header) stuff */
+#header > a, #header > img, #header > form, #query-box, #submit-button, #buttons {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#submit-button {
+	height: 20px;
+	padding: 5px;
+	background-color: #e0e0e0;
+	border-radius: 5px;
+}
+
+fieldset {
+    margin: 0;
+	padding: 0;
+}
+
+#search-form input[type=text] {
+    width: 200px;
+    height: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+table {
+    border: none;
+    margin-left: 40px;
+}
+
+#search-form input[type=submit] {       /* submit button */
+    height: 20px;
+    /*background:url("magnifying-glass.png") no-repeat;*/
+}
+
+
+
+
+.error-message {
+	color: #ff0000;
+	font-family: "Courier New", "Courier", monospace;
+	margin: 0;
+}
+
+
+
+
+/* login/register form stuff */
+#registration, #login {                 /* wrapper divs */
+    margin: 40px 0;
+}
+
+
+
+
+#registration > div, #login > div {     /* div for each text input */
+    margin: 20px 0;
+}
+
+#registration label, #login label {
+	display: inline-block;              /* default is inline, so margins wont work unless we do this */
+	margin-bottom: 3px;
+}
+
+#registration input[type=text], #login input[type=text] {   /* text inputs */
+    height: 40px;
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 0 10px;
+}
+
+
+
+
+#register-button, #login-button {							/* submit button */
+    background-color: #c0c0c0;
+    color: #ffffff;				/* text colour */
+    height: 40px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+}
+

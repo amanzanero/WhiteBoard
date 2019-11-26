@@ -1,0 +1,81 @@
+/*
+       document : global.css
+     created on : 2019 november 18, 16:06 pm (monday)
+         author : audrey bongalon
+      USC email : bongalon@usc.edu
+         USC ID : 9152272619
+    description : csci201 final project - common css shared across multiple pages
+
+                                        88
+                                        88
+                                        88
+      ,adPPYYba,  88       88   ,adPPYb,88  8b,dPPYba,   ,adPPYba,  8b       d8
+      ""     `Y8  88       88  a8"    `Y88  88P'   "Y8  a8P,,,,,88  `8b     d8'
+      ,adPPPPP88  88       88  8b      :88  88          8PP"""""""   `8b   d8'
+      88,    ,88  "8a,   ,a88  "8a,   ,d88  88          "8b,   ,aa    `8b,d8'
+      `"8bbdP"Y8   `"YbbdP'Y8   `"8bbdP"Y8  88           `"Ybbd8"'      Y88'
+                                                                        d8'
+                                                                       d8'
+*/
+
+
+root {
+    display: block;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: "Raleway", sans-serif;
+    background: #ffffff;
+    height: 100%;
+    min-height: 100%;
+}
+
+
+
+
+#everything {
+	height: 100%;
+    min-height: 100%;
+}
+
+
+
+
+#main {
+    margin: 0 20%;
+    padding: 0 0;
+}
+
+
+
+
+#header-wrapper {
+    border-bottom: 1px solid #e0e0e0;
+    width: 100%;
+
+}
+#header {
+    margin: 0 20%;
+}
+#header a {     /* prevents weird underline on whiteboard logo */
+    text-decoration: none;
+}
+
+
+
+
+#whiteboard-logo {
+    height: 100px;
+    margin: 40px 0;
+}
+
+
+
+
+fieldset {
+    border: 0;
+}
+
