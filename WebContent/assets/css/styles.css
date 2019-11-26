@@ -6,12 +6,11 @@ body, html{
 body{
     position:relative;
     height:100%;
-    overflow:hidden;
 }
 
 .bg-image {
   /* The image used */
-  background-image: url("../images/23988066.jpg");
+  background-image: url("../images/background.jpg");
 	-webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -27,6 +26,7 @@ body{
     -o-filter: blur(3px) brightness(0.75);
     position: absolute;
     z-index: -1;
+    position: fixed;
 }
 
 .page-content {

@@ -15,17 +15,40 @@
 
 <% 
 Boolean loggedIn = false;
+Object u = request.getAttribute("username");
+String user = (u != null) ? u.toString() : "";
+
+if (!user.equals("")) loggedIn = true;
+
+// FAKE DATA FOR QUEUE POPUP
+String[] queues = {
+    "CSCI201",
+    "CSCI270",
+    "BISC115",
+    "CSCI201",
+    "CSCI270",
+    "BISC115",
+    "CSCI201",
+    "CSCI270",
+    "BISC115",
+    "CSCI201",
+    "CSCI270",
+    "BISC115",
+    "CSCI201",
+    "CSCI270",
+    "BISC115"
+};
+
 %>
-  
+
   <body>
 	<div class="bg-image"></div>
 	<nav class="navbar navbar-expand-lg bg-dark navbar-dark justify-content-end">
-	    <a class="navbar-brand ml-1 mr-auto" href="#">WhiteBoard</a>
+	    <a class="navbar-brand ml-1 mr-auto" href="homepage.jsp">WhiteBoard</a>
 	    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
 	        <span class="navbar-toggler-icon"></span>
 	    </button>
 	    <div class="collapse navbar-collapse flex-grow-0" id="navbarSupportedContent">
-
 <%
 String leftLink = "";
 String rightLink = "";
@@ -73,6 +96,25 @@ else {
 		      <input name="username" class="form-control mr-sm-1 col-sm-8" type="search" placeholder="CSCI 201">
 		      <button class="btn btn-outline-dark my-sm-2" type="submit">Go to Queue</button>
 		    </form>
+		</div>
+        <div class="card w-50 d-flex flex-column align-tems-center m-1" style="padding: 1em;">
+			<h3>
+				Available queues!
+			</h3>
+            <ul class="list-group">
+<%
+for (String q : queues) {
+%>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <%=q %>
+            <a href="homepage.jsp">
+                <button type="button" class="btn btn-dark">View</button>
+            </a>
+        </li>
+<%
+}
+%>
+            </ul>
 		</div>
 	</div>
   </body>
