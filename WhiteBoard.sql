@@ -1,5 +1,7 @@
 CREATE DATABASE WhiteBoard;
 
+USE WhiteBoard;
+
 CREATE TABLE Users(
 	UserID INT(11) NOT NULL Primary key AUTO_INCREMENT, 
 	userName VARCHAR(255) NOT NULL,
