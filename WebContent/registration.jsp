@@ -21,25 +21,26 @@
 
 <html lang="en">
 <head>
+     <!-- Required meta tags -->
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
     <title>WhiteBoard - Registration</title>
-    <link rel="icon" type="image/png" sizes="96x96"
-          href="https://raw.githubusercontent.com/audreybongalon/documents/gh-pages/audreyfavicons/favicon-96x96.png">
     <link href="https://fonts.googleapis.com/css?family=Raleway|Open+Sans" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="global.css">
-    <link rel="stylesheet" type="text/css" href="login-register.css">
-    <meta name="theme-color" content="#4c2b15">
 </head>
 <body>
     <div id="everything">
-        <div id="header-wrapper"><div id="header">
-            <a href="homepage.jsp">
-                <img id="whiteboard-logo" src="whiteboard.png" alt="whiteboard logo">
-            </a>
-            <h1>WhiteBoard (header text here)</h1>
-        </div></div>
-
-        <div id="main-wrapper"><div id="main">
+        <div class="bg-image"></div>
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark justify-content-end">
+		    <a class="navbar-brand ml-1 mr-auto" href="homepage.jsp">WhiteBoard</a>
+		    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+		        <span class="navbar-toggler-icon"></span>
+		    </button>
+		</nav>
+        <div id="main-wrapper"><div id="main" style="display: flex; flex-direction: column; align-items: center;">
+        <div class="card w-50 d-flex flex-column align-items-center m-5" style="padding: 1em;">
             <%
                 /* data will get sent back in case of error */
                 String username = request.getParameter("username");
@@ -57,33 +58,28 @@
                 if (passwordError != null)  passwordError = (String)passwordError;
                 if (confirmError != null)   confirmError  = (String)confirmError;
             %>
-            <form id="registration" action="Register" method="post">
-                <div>
-                	<label for="username-box">Username</label>
-                    <input id="username-box" type="text" name="username" value="<%= username %>">
+            <form id="registration" action="Register" method="post" class="form-inline my-lg-0 d-flex flex-column align-items-start w-100">
+                	<label for="username-box" class="h5 m-1">Username</label>
+                    <input id="username-box" class="form-control w-100" type="text" name="username" value="<%= username %>">
                     <% if (usernameError != null) { %>
                         <p id="username-error" class="error-message"><%= usernameError %></p>
                     <% } %>
-                </div>
 
-                <div>
-                    <label for="password-box">Password</label>
-                    <input id="password-box" type="text" name="password" value="<%= password %>">
+                    <label for="password-box" class="h5 m-1">Password</label>
+                    <input id="password-box" class="form-control w-100" type="text" name="password" value="<%= password %>">
                     <% if (passwordError != null) { %>
                         <p id="password-error" class="error-message"><%= passwordError %></p>
                     <% } %>
-                </div>
 
-                <div>
-                    <label for="pw-confirm-box">Confirm Password</label>
-                    <input id="pw-confirm-box" type="text" name="pw-confirm">
+                    <label for="pw-confirm-box" class="h5 m-1">Confirm Password</label>
+                    <input id="pw-confirm-box" class="form-control w-100" type="text" name="pw-confirm">
                     <% if (confirmError != null) { %>
                         <p id="pw-confirm-error" class="error-message"><%= confirmError %></p>
                     <% } %>
-                </div>
 
-                <input id="register-button" type="submit" value="Register">
+                <button class="btn btn-outline-success my-sm-2 w-100" id="register-button" type="submit">Register</button>
             </form>
+         </div>
         </div></div>
     </div>
 </body>

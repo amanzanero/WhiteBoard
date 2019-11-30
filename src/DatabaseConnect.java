@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Vector;
 
 public class DatabaseConnect {
 	private DatabaseConnect() {}
@@ -357,5 +358,69 @@ public class DatabaseConnect {
 		return unparsedOrder;
 	}
 
-
+    public static Boolean logIn(String username, String password) {
+    	PreparedStatement pst = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		Boolean result = false;
+		try {
+			conn = DriverManager.getConnection(SQL_Connection);
+			pst = conn.prepareStatement("SELECT * FROM Users WHERE userName=?");
+			pst.setString(1, username);
+			rs = pst.executeQuery();
+			if(rs.next()) {
+				result = true;
+				String db_pass = rs.getString("hashedPass");
+				if (!password.equals(db_pass)) result = false;
+			}
+			else {
+				result = false;
+			}
+			
+		}catch(SQLException sqle) {
+			System.out.println(sqle.getMessage());
+		}finally {
+			terminateConnection(conn,rs,pst);
+		}
+		return result;
+    }
+    
+    public static void registerUser(String usr, String pass) {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(SQL_Connection);
+			PreparedStatement reg = conn.prepareStatement("INSERT INTO Users(userName, hashedPass, numQueuesIn, queuesWaitingIn, isAdminOf) VALUES(?,?,?,?,?);");
+			reg.setString(1, usr);
+			reg.setString(2, pass);
+			reg.setInt(3, 0);
+			reg.setInt(4, 0);
+			reg.setString(5, "");
+			reg.execute();
+			reg.close();
+			conn.close();
+		} catch (SQLException sqle) {
+			 System.out.println("$$$err: "+sqle.getMessage());
+		}
+	}
+    
+    public static Vector<String> getAllQueues() {
+		Connection conn = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		Vector<String> results = new Vector<>();
+		try {
+			conn = DriverManager.getConnection(SQL_Connection);
+			pst = conn.prepareStatement("SELECT* FROM Queues");
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				results.add(rs.getString("queueName"));
+			}
+			
+		}catch(SQLException sqle) {
+			System.out.println(sqle.getMessage());
+		}finally {
+			terminateConnection(conn,rs,pst);
+		}
+		return results;
+	}
 }
