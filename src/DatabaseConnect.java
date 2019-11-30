@@ -357,5 +357,48 @@ public class DatabaseConnect {
 		return unparsedOrder;
 	}
 
-
+    public static Boolean logIn(String username, String password) {
+    	PreparedStatement pst = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		Boolean result = false;
+		try {
+			conn = DriverManager.getConnection(SQL_Connection, SQL_user, SQL_user_password);
+			pst = conn.prepareStatement("SELECT * FROM Users WHERE userName=?");
+			pst.setString(1, username);
+			rs = pst.executeQuery();
+			if(rs.next()) {
+				result = true;
+				String db_pass = rs.getString("hashedPass");
+				if (!password.equals(db_pass)) result = false;
+			}
+			else {
+				result = false;
+			}
+			
+		}catch(SQLException sqle) {
+			System.out.println(sqle.getMessage());
+		}finally {
+			terminateConnection(conn,rs,pst);
+		}
+		return result;
+    }
+    
+    public static void registerUser(String usr, String pass) {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(SQL_Connection);
+			PreparedStatement reg = conn.prepareStatement("INSERT INTO Users(userName, hashedPass, numQueuesIn, queuesWaitingIn, isAdminOf) VALUES(?,?,?,?,?);");
+			reg.setString(1, usr);
+			reg.setString(2, pass);
+			reg.setInt(3, 0);
+			reg.setInt(4, 0);
+			reg.setString(5, "");
+			reg.execute();
+			reg.close();
+			conn.close();
+		} catch (SQLException sqle) {
+			 System.out.println("$$$err: "+sqle.getMessage());
+		}
+	}
 }
