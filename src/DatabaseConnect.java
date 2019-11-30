@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Vector;
 
 public class DatabaseConnect {
 	private DatabaseConnect() {}
@@ -363,7 +364,7 @@ public class DatabaseConnect {
 		Connection conn = null;
 		Boolean result = false;
 		try {
-			conn = DriverManager.getConnection(SQL_Connection, SQL_user, SQL_user_password);
+			conn = DriverManager.getConnection(SQL_Connection);
 			pst = conn.prepareStatement("SELECT * FROM Users WHERE userName=?");
 			pst.setString(1, username);
 			rs = pst.executeQuery();
@@ -400,5 +401,26 @@ public class DatabaseConnect {
 		} catch (SQLException sqle) {
 			 System.out.println("$$$err: "+sqle.getMessage());
 		}
+	}
+    
+    public static Vector<String> getAllQueues() {
+		Connection conn = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		Vector<String> results = new Vector<>();
+		try {
+			conn = DriverManager.getConnection(SQL_Connection);
+			pst = conn.prepareStatement("SELECT* FROM Queues");
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				results.add(rs.getString("queueName"));
+			}
+			
+		}catch(SQLException sqle) {
+			System.out.println(sqle.getMessage());
+		}finally {
+			terminateConnection(conn,rs,pst);
+		}
+		return results;
 	}
 }
