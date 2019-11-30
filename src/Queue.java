@@ -1,5 +1,6 @@
+package servlets;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Queue {
 	//Data Structure storing the String
@@ -25,7 +26,7 @@ public class Queue {
 	}
 
 	//parses queue into a String that will be stored in the SQL database
-	public String toString() {
+	public String dumpString() {
 		String list = String.join(",", 	queue);
 		return list;
 	}
