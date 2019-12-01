@@ -8,8 +8,8 @@ VALUES
 
 INSERT INTO Queues (queueName, queueOrder)
 VALUES
-    ("CSCI201", ""),
-    ("CSCI270", "");
+    ("CSCI201", "ttrojan,ttraveler,jbruin"),
+    ("CSCI270", "jbruin");
 
 INSERT INTO Users (userName, hashedPass)
 VALUES
