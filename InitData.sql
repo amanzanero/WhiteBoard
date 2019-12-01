@@ -3,7 +3,7 @@ Use WhiteBoard;
 INSERT INTO Visitors (userName, numQueuesIn, queuesWaitingIn)
 VALUES
     ("ttrojan", 1, "CSCI201"),
-    ("jbruin", 2, "CSCI201, CSCI270"),
+    ("jbruin", 2, "CSCI201,CSCI270"),
     ("ttraveler", 1, "CSCI201");
 
 INSERT INTO Queues (queueName, queueOrder)

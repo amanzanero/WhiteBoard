@@ -472,23 +472,25 @@ public class DatabaseConnect {
 		PreparedStatement pst = null;
 		try {
 			conn = createConn();
+			Boolean firstQ = false;
 			System.out.println("Adding "+visitor_name+" to "+queue_name+".");
 			if (!checkIfVisitorExists(visitor_name)) {
 				PreparedStatement insert = conn.prepareStatement(
-						"INSERT INTO Visitors(usernName, numQueuesWaitingIn, queuesWaitingIn) "+
+						"INSERT INTO Visitors(userName, numQueuesIn, queuesWaitingIn) "+
 					    "VALUES (?,?,?)"
 						);
 				insert.setString(1, visitor_name);
 				insert.setInt(2, 0);
-				insert.setString(3, "");
+				insert.setString(3, queue_name);
 				insert.execute();
+				firstQ = true;
 			}
 			pst = conn.prepareStatement(
 					"UPDATE Visitors SET numQueuesIn=numQueuesIn+1, queuesWaitingIn=? "+
 					"WHERE userName=?"
 					);
 			Vector<String> queues = getVisitorQueues(visitor_name);
-			queues.add(queue_name);
+			if (!firstQ) queues.add(queue_name);
 			pst.setString(1, String.join(",", queues));
 			pst.setString(2, visitor_name);
 			pst.execute();
