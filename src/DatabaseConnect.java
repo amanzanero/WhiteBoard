@@ -1,3 +1,4 @@
+package servlets;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -5,17 +6,33 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Vector;
+
 
 public class DatabaseConnect {
 	private DatabaseConnect() {}
-    private static String SQL_database_name = "";
+    private static String SQL_database_name = "WhiteBoard";
 	private static String SQL_instance_name = "";
-	private static String SQL_user = "";
-	private static String SQL_user_password = "";
-	private static String SQL_Connection = "jdbc:mysql://google/"+SQL_database_name+"?cloudSqlInstance="
-			+ SQL_instance_name+"&socketFactory=com.google.cloud.sql.mysql.SocketFactory"
-			+ "&useSSL=false&user="+SQL_user+"&password="+SQL_user_password;
+	private static String SQL_user = "root";
+	private static String SQL_user_password = "5997";
+	private static String SQL_Connection = "jdbc:mysql://localhost:3306/";
+	
+	private static Connection createConn() {
+		try {
+			if (SQL_Connection.contains("google")) {
+				return DriverManager.getConnection(SQL_Connection+SQL_database_name+"?cloudSqlInstance="
+						+ SQL_instance_name+"&socketFactory=com.google.cloud.sql.mysql.SocketFactory"
+						+ "&useSSL=false&user="+SQL_user+"&password="+SQL_user_password
+						);
+			}
+			return DriverManager.getConnection(SQL_Connection + SQL_database_name, SQL_user, SQL_user_password);
+		}
+		catch(SQLException sqle) {
+			System.out.println(sqle.getMessage());
+		}
+		return null;
+	}
 
     private static void terminateConnection(Connection conn, ResultSet rs, PreparedStatement pst) {
 		try {
@@ -39,12 +56,36 @@ public class DatabaseConnect {
         Connection conn = null;
         boolean success = true;
 		try {
-            conn = DriverManager.getConnection(SQL_Connection);
+            conn = createConn();
             pst = conn.prepareStatement("SELECT * FROM Users WHERE userName =?");
 			pst.setString(1, userName);
 			rs = pst.executeQuery();
 			if(!rs.next()) {
 				success = false;
+			}
+		}catch(SQLException sqle) {
+			System.out.println(sqle.getMessage());
+		}finally {terminateConnection(conn,rs,pst);}
+		return success;
+    }
+    
+    public static boolean checkIfVisitorExists(String userName) {
+		PreparedStatement pst = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        boolean success = true;
+        System.out.print("Checking if "+userName+" exists... ");
+		try {
+            conn = createConn();
+            pst = conn.prepareStatement("SELECT * FROM Visitors WHERE userName =?");
+			pst.setString(1, userName);
+			rs = pst.executeQuery();
+			if(!rs.next()) {
+				success = false;
+				System.out.println("no!");
+			}
+			else {
+				System.out.println("yes!");
 			}
 		}catch(SQLException sqle) {
 			System.out.println(sqle.getMessage());
@@ -58,7 +99,7 @@ public class DatabaseConnect {
 		Connection conn = null;
 		boolean success = true;
 		try {
-			conn = DriverManager.getConnection(SQL_Connection);
+			conn = createConn();
 			pst = conn.prepareStatement("SELECT * FROM Queues WHERE queueName = ?");
 			pst.setString(1, queueName);
 			rs = pst.executeQuery();
@@ -86,7 +127,7 @@ public class DatabaseConnect {
 			ResultSet rs = null;
 			try
 			{
-				conn = DriverManager.getConnection(SQL_Connection);
+				conn = createConn();
 				ps= conn.prepareStatement("SELECT * FROM Queues WHERE queueName=?");
 				ps.setString(1,queueName);
 				rs = ps.executeQuery();
@@ -121,7 +162,7 @@ public class DatabaseConnect {
 			{   
                 if(queueExists(queueName))
 				{
-                    conn = DriverManager.getConnection(SQL_Connection);
+                    conn = createConn();
                     ps = conn.prepareStatement("Update Queues SET queueOrder=? WHERE queueName=?");
 					ps.setString(1, updatedQueue);
 					ps.setString(2, queueName);
@@ -143,8 +184,7 @@ public class DatabaseConnect {
 	{
 		boolean success = true;
 		
-		if(userName.isEmpty())
-		{
+		if(userName.isEmpty()) {
 			success=false;
 		}
 		else {
@@ -155,15 +195,12 @@ public class DatabaseConnect {
 			{
 				if(!checkIfUserExists(userName))
 				{
-                    conn = DriverManager.getConnection(SQL_Connection);
-                    ps= conn.prepareStatement("INSERT INTO Users (userName, hashedPass, numQueuesIn, queuesWaitingIn, isAdminOf) VALUES (?,?,?,?,?)");
+                    conn = createConn();
+                    ps= conn.prepareStatement("INSERT INTO Users (userName, hashedPass) VALUES (?,?)");
 					ps.setString(1, userName);
 					String pswrd = "";
 					pswrd = (hashedPass_==null?"":hashedPass_);
 					ps.setString(2, pswrd);
-					ps.setInt(3, 0);
-					ps.setString(4, "");
-					ps.setString(5, "");
 					ps.executeUpdate();
 				}
 				else
@@ -178,7 +215,7 @@ public class DatabaseConnect {
 			 finally {terminateConnection(conn, rs, ps);}
 		}
 		
-		return success==true?true:false;
+		return success;
 	} 
 
     public static boolean deleteUser(String userName)
@@ -196,7 +233,7 @@ public class DatabaseConnect {
 			ResultSet rs = null;
 			try
 			{
-				conn = DriverManager.getConnection(SQL_Connection);
+				conn = createConn();
 				ps= conn.prepareStatement("SELECT * FROM Users WHERE username=?");
 				ps.setString(1,userName);
 				rs = ps.executeQuery();
@@ -271,7 +308,7 @@ public class DatabaseConnect {
 			ResultSet rs2 = null;
 			try
 			{
-				conn = DriverManager.getConnection(SQL_Connection);
+				conn = createConn();
 				ps= conn.prepareStatement("SELECT * FROM Users WHERE username=?");
 				ps.setString(1,userName);
 				rs = ps.executeQuery();
@@ -323,7 +360,7 @@ public class DatabaseConnect {
 		PreparedStatement pst = null;
 		Connection conn = null;
 		try {
-			conn = DriverManager.getConnection(SQL_Connection);
+			conn = createConn();
 			pst = conn.prepareStatement("UPDATE Queues SET adminList=? WHERE queueName=?");
 			pst.setString(1, newString);
 			pst.setString(2, queueName);
@@ -342,7 +379,7 @@ public class DatabaseConnect {
 		ResultSet rs = null;
 		Connection conn = null;
 		try {
-			conn = DriverManager.getConnection(SQL_Connection);
+			conn = createConn();
 			pst = conn.prepareStatement("SELECT* FROM Queues WHERE queueName=?");
 			pst.setString(1, queueName);
 			rs = pst.executeQuery();
@@ -364,7 +401,7 @@ public class DatabaseConnect {
 		Connection conn = null;
 		Boolean result = false;
 		try {
-			conn = DriverManager.getConnection(SQL_Connection);
+			conn = createConn();
 			pst = conn.prepareStatement("SELECT * FROM Users WHERE userName=?");
 			pst.setString(1, username);
 			rs = pst.executeQuery();
@@ -385,31 +422,13 @@ public class DatabaseConnect {
 		return result;
     }
     
-    public static void registerUser(String usr, String pass) {
-		Connection conn = null;
-		try {
-			conn = DriverManager.getConnection(SQL_Connection);
-			PreparedStatement reg = conn.prepareStatement("INSERT INTO Users(userName, hashedPass, numQueuesIn, queuesWaitingIn, isAdminOf) VALUES(?,?,?,?,?);");
-			reg.setString(1, usr);
-			reg.setString(2, pass);
-			reg.setInt(3, 0);
-			reg.setInt(4, 0);
-			reg.setString(5, "");
-			reg.execute();
-			reg.close();
-			conn.close();
-		} catch (SQLException sqle) {
-			 System.out.println("$$$err: "+sqle.getMessage());
-		}
-	}
-    
     public static Vector<String> getAllQueues() {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		Vector<String> results = new Vector<>();
 		try {
-			conn = DriverManager.getConnection(SQL_Connection);
+			conn = createConn();
 			pst = conn.prepareStatement("SELECT* FROM Queues");
 			rs = pst.executeQuery();
 			while (rs.next()) {
@@ -423,4 +442,28 @@ public class DatabaseConnect {
 		}
 		return results;
 	}
+    
+    public static Vector<String> getVisitorQueues(String username) {
+    	Connection conn = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		Vector<String> results = null;
+		try {
+			conn = createConn();
+			pst = conn.prepareStatement("SELECT * FROM Visitors WHERE userName=? LIMIT 1");
+			pst.setString(1, username);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				String qs = rs.getString("queuesWaitingIn");
+				String[] queues = qs.split(",");
+				results = new Vector<String>(Arrays.asList(queues));
+			}
+			
+		}catch(SQLException sqle) {
+			System.out.println(sqle.getMessage());
+		}finally {
+			terminateConnection(conn,rs,pst);
+		}
+		return results;
+    }
 }
