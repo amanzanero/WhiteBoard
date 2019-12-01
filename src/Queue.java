@@ -43,7 +43,7 @@ public class Queue {
 
 	//inserts a user into an existing queue
 	public void insertUsertoQueue(String userID) {
-		if (queue.indexOf(userID) != -1) {
+		if (queue.indexOf(userID) == -1) {
 			queue.add(userID);
 		}
 		
