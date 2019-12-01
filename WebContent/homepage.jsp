@@ -70,7 +70,7 @@ else {
 Object vErr = request.getAttribute("visitorError");
 %>
 	<div class="page-content container-fluid d-flex flex-column align-items-center">
-		<div class="card w-50 d-flex flex-column align-tems-center m-1" style="padding: 1em;">
+		<div class="card w-100 d-flex flex-column align-tems-center m-1" style="padding: 1em;">
 			<h3>
 				Already in a Queue?
 			</h3>
@@ -88,7 +88,7 @@ if (vqs != null) {
 	Vector<String> visitorQueues = (Vector<String>) vqs;
 	String visitorName = (String)v;
 %>
-		<div class="card w-50 d-flex flex-column align-tems-center m-1" style="padding: 1em;">
+		<div class="card w-100 d-flex flex-column align-tems-center m-1" style="padding: 1em;">
 			<h4>
 				<%=visitorName %>'s queues
 			</h4>
@@ -112,7 +112,7 @@ if (vqs != null) {
 }
 Object qErr = request.getAttribute("queueError");
 %>		
-		<div class="card w-50 d-flex flex-column align-tems-center m-1" style="padding: 1em;">
+		<div class="card w-100 d-flex flex-column align-tems-center m-1" style="padding: 1em;">
 			<h3>
 				Go directly to the Queue you want!
 			</h3>
@@ -122,7 +122,7 @@ Object qErr = request.getAttribute("queueError");
 		    </form>
 		   	<p><%=(qErr == null) ? "": "Queue does not exist!"%></p>
 		</div>
-        <div class="card w-50 d-flex flex-column align-tems-center m-1" style="padding: 1em;">
+        <div class="card w-100 d-flex flex-column align-tems-center m-1" style="padding: 1em;">
 <%
 	String qText = null;
 	if (queues.size() == 0 ) qText = "No queues available";
