@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import ="servlets.DatabaseConnect"%>
+<%@ page import ="java.util.Vector"%>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -15,29 +18,14 @@
 
 <% 
 Boolean loggedIn = false;
-Object u = request.getAttribute("username");
+HttpSession sesh = request.getSession();
+Object u = sesh.getAttribute("username");
 String user = (u != null) ? u.toString() : "";
 
 if (!user.equals("")) loggedIn = true;
 
 // FAKE DATA FOR QUEUE POPUP
-String[] queues = {
-    "CSCI201",
-    "CSCI270",
-    "BISC115",
-    "CSCI201",
-    "CSCI270",
-    "BISC115",
-    "CSCI201",
-    "CSCI270",
-    "BISC115",
-    "CSCI201",
-    "CSCI270",
-    "BISC115",
-    "CSCI201",
-    "CSCI270",
-    "BISC115"
-};
+Vector<String> queues = DatabaseConnect.getAllQueues();
 
 %>
 
@@ -58,13 +46,13 @@ if (loggedIn) {
 	leftLink = "Dashboard";
 	leftHref = "dashboard.jsp";
 	rightLink = "Log Out";
-	rightHref = "logout";
+	rightHref = "Logout";
 }
 else {
 	leftLink = "Login";
 	leftHref = "login.jsp";
 	rightLink = "Register";
-	rightHref = "register.jsp";
+	rightHref = "registration.jsp";
 }
 %>
 			<ul class="navbar-nav text-right">
@@ -78,39 +66,82 @@ else {
         
 	    </div>
 	</nav>
+<%
+Object vErr = request.getAttribute("visitorError");
+%>
 	<div class="page-content container-fluid d-flex flex-column align-items-center">
 		<div class="card w-50 d-flex flex-column align-tems-center m-1" style="padding: 1em;">
 			<h3>
 				Already in a Queue?
 			</h3>
-			<form action="homepage.jsp" class="form-inline my-lg-0 d-flex justify-content-center w-100">
-		      <input name="username" class="form-control mr-sm-1 col-sm-8" type="search" placeholder="tommytrojan">
+			<form action="UserQueues" class="form-inline my-lg-0 d-flex justify-content-center w-100">
+		      <input name="visitorname" class="form-control mr-sm-1 col-sm-8" type="search" placeholder="tommytrojan">
 		      <button class="btn btn-outline-dark my-sm-2" type="submit">Find Queues!</button>
+		      <p id="vistorFindErr"><%=(vErr==null) ? "" : "User does not exist in any queues" %></p>
 		    </form>
 		</div>
+<%
+Object vqs = request.getAttribute("visitorQueues");
+Object v = request.getAttribute("visitorName");
+
+if (vqs != null) {
+	Vector<String> visitorQueues = (Vector<String>) vqs;
+	String visitorName = (String)v;
+%>
+		<div class="card w-50 d-flex flex-column align-tems-center m-1" style="padding: 1em;">
+			<h4>
+				<%=visitorName %>'s queues
+			</h4>
+			<ul class="list-group">
+<%
+	for (String q : visitorQueues) {
+		String link = "queue.jsp?course="+q+"&visitorname="+visitorName;
+%>
+		        <li class="list-group-item d-flex justify-content-between align-items-center">
+		            <%=q %>
+		            <a href=<%=link %>>
+		                <button type="button" class="btn btn-dark">View</button>
+		            </a>
+		        </li>
+<%
+	}
+%>
+            </ul>
+       	</div>
+<%
+}
+Object qErr = request.getAttribute("queueError");
+%>		
 		<div class="card w-50 d-flex flex-column align-tems-center m-1" style="padding: 1em;">
 			<h3>
 				Go directly to the Queue you want!
 			</h3>
-			<form action="homepage.jsp" class="form-inline my-1 my-lg-0 d-flex justify-content-center w-100">
-		      <input name="username" class="form-control mr-sm-1 col-sm-8" type="search" placeholder="CSCI 201">
+			<form action="ToQueue" class="form-inline my-1 my-lg-0 d-flex justify-content-center w-100">
+		      <input name="queueName" class="form-control mr-sm-1 col-sm-8" type="search" placeholder="CSCI 201">
 		      <button class="btn btn-outline-dark my-sm-2" type="submit">Go to Queue</button>
 		    </form>
+		   	<p><%=(qErr == null) ? "": "Queue does not exist!"%></p>
 		</div>
         <div class="card w-50 d-flex flex-column align-tems-center m-1" style="padding: 1em;">
+<%
+	String qText = null;
+	if (queues.size() == 0 ) qText = "No queues available";
+	else qText = "Available queues!";
+%>
 			<h3>
-				Available queues!
+				<%=qText %>
 			</h3>
             <ul class="list-group">
 <%
 for (String q : queues) {
+	String link = "queue.jsp?course="+q;
 %>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <%=q %>
-            <a href="homepage.jsp">
-                <button type="button" class="btn btn-dark">View</button>
-            </a>
-        </li>
+		        <li class="list-group-item d-flex justify-content-between align-items-center">
+		            <%=q %>
+		            <a href=<%=link %>>
+		                <button type="button" class="btn btn-dark">View</button>
+		            </a>
+		        </li>
 <%
 }
 %>
@@ -119,8 +150,6 @@ for (String q : queues) {
 	</div>
   </body>
   <footer>
-  	<!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="assets/js/jquery-3.3.1.slim.min.js"></script>
     <script src="assets/js/popper.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
