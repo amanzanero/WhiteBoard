@@ -447,7 +447,7 @@ public class DatabaseConnect {
     	Connection conn = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
-		Vector<String> results = null;
+		Vector<String> results = new Vector<String>();
 		try {
 			conn = createConn();
 			pst = conn.prepareStatement("SELECT * FROM Visitors WHERE userName=? LIMIT 1");
@@ -465,5 +465,38 @@ public class DatabaseConnect {
 			terminateConnection(conn,rs,pst);
 		}
 		return results;
+    }
+    
+    public static void addVisitor(String visitor_name, String queue_name) {
+    	Connection conn = null;
+		PreparedStatement pst = null;
+		try {
+			conn = createConn();
+			System.out.println("Adding "+visitor_name+" to "+queue_name+".");
+			if (!checkIfVisitorExists(visitor_name)) {
+				PreparedStatement insert = conn.prepareStatement(
+						"INSERT INTO Visitors(usernName, numQueuesWaitingIn, queuesWaitingIn) "+
+					    "VALUES (?,?,?)"
+						);
+				insert.setString(1, visitor_name);
+				insert.setInt(2, 0);
+				insert.setString(3, "");
+				insert.execute();
+			}
+			pst = conn.prepareStatement(
+					"UPDATE Visitors SET numQueuesIn=numQueuesIn+1, queuesWaitingIn=? "+
+					"WHERE userName=?"
+					);
+			Vector<String> queues = getVisitorQueues(visitor_name);
+			queues.add(queue_name);
+			pst.setString(1, String.join(",", queues));
+			pst.setString(2, visitor_name);
+			pst.execute();
+	
+		}catch(SQLException sqle) {
+			System.out.println(sqle.getMessage());
+		}finally {
+			terminateConnection(conn,null,pst);
+		}
     }
 }
