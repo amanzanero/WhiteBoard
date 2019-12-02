@@ -501,4 +501,26 @@ public class DatabaseConnect {
 			terminateConnection(conn,null,pst);
 		}
     }
+    
+    public static Vector<String> getUserQueues(String username) {
+    	Connection conn = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		Vector<String> results = new Vector<>();
+		try {
+			conn = createConn();
+			pst = conn.prepareStatement("SELECT q.queueName FROM Queues q WHERE q.queueID IN (SELECT a.queueID FROM Admins a WHERE a.UserID in (SELECT u.UserID FROM Users u where userName=?))");
+			pst.setString(1, username);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				results.add(rs.getString("queueName"));
+			}
+			
+		}catch(SQLException sqle) {
+			System.out.println(sqle.getMessage());
+		}finally {
+			terminateConnection(conn,rs,pst);
+		}
+		return results;
+    }
 }
