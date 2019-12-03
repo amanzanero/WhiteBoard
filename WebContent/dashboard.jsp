@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import ="servlets.DatabaseConnect"%>
+<%@ page import ="whiteboard.DatabaseConnect"%>
 <%@ page import ="java.util.Vector"%>
 <%@ page import ="java.util.Arrays"%>
 <!DOCTYPE html>
@@ -22,10 +22,8 @@ Boolean loggedIn = false;
 HttpSession sesh = request.getSession();
 Object u = sesh.getAttribute("username");
 String user = (u != null) ? u.toString() : "";
-
 if (!user.equals("")) loggedIn = true;
 else response.sendRedirect("homepage.jsp");  // redirect to homepage if not logged in
-
 /* Vector<String> adminQueues = DatabaseConnect.getAdminQueues(user);
  */
 %>
@@ -102,8 +100,19 @@ for (String queue : queues) {
 				</div>
 			  </li>
 			</ul>
-			
+			<%
+				Object alreadyExists = request.getAttribute("alreadyExists");
+				String existsError = null;
+				if(alreadyExists!=null){existsError = alreadyExists.toString();}
+			%>
+			<%
+				if(existsError!=null){
+			%>
+					<span style="color:red; font:Times"><%=existsError %></span>
+		    
+		    <%} %>
 		</div>
+	
 	</div>
 	
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -116,19 +125,19 @@ for (String queue : queues) {
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	        <form>
+	        <form id="newQueue" action="createQueue" method="post">
 	          <div class="form-group">
 	            <label for="recipient-name" class="col-form-label">Queue Name</label>
-	            <input type="text" class="form-control" id="recipient-name">
+	            <input type="text" class="form-control" id="recipient-name" name="newName">
 	          </div>
 	          <div class="form-group">
-	            
+	            <div class="modal-footer">
+	        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	    
+	      	 		<button type="submit" class="btn btn-primary" >Create</button>
+	      		</div>
 	          </div>
 	        </form>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Create</button>
 	      </div>
 	    </div>
 	  </div>
