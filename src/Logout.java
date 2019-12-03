@@ -16,7 +16,7 @@
                                                                \/____/
 */
 
-package myServelets;
+package servlets;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

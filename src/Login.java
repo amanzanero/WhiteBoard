@@ -16,20 +16,13 @@
                                                                \/____/
 */
 
-package myServelets;
+package servlets;
 
-import myServelets.DatabaseManager;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.RequestDispatcher;
 import java.io.IOException;
 
-
-
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
@@ -45,12 +38,12 @@ public class Login extends HttpServlet {
 	// valid names are only letters and spaces
     private boolean isValidUsername(String username) {
 		if (username == null) return false;
-    	return !username.isBlank();
+    	return !username.isEmpty();
 	}
 
 	private boolean isValidPassword(String password) {
 		if (password == null) return false;
-		return !password.isBlank();
+		return !password.isEmpty();
 	}
 
 
@@ -64,8 +57,8 @@ public class Login extends HttpServlet {
 
 		username = request.getParameter("username");
 		password = request.getParameter("password");
-		if (username != null && username.isBlank()) username = null;
-		if (password != null && password.isBlank()) password = null;
+		if (username != null && username.isEmpty()) username = null;
+		if (password != null && password.isEmpty()) password = null;
 
 		System.out.println("attempting to log in with the following credentials:");
 		System.out.println("------------------------------------------------------");
@@ -95,7 +88,7 @@ public class Login extends HttpServlet {
 			canLogIn = false;
 		}
 		// check "canLogIn" so we dont override the "no username" error
-		else if (canLogIn && !DatabaseManager.hasUser(username)) {
+		else if (canLogIn && !DatabaseConnect.checkIfUserExists(username)) {
 			System.out.println("user does not exist");
 			request.setAttribute("usernameError", "The user does not exist.");
 			forwardMe = sendBack;
@@ -103,7 +96,7 @@ public class Login extends HttpServlet {
 		}
 
 		if (canLogIn) {
-			if (DatabaseManager.logIn(username, password)) {
+			if (DatabaseConnect.logIn(username, password)) {
 				// if there's an old session, end it
 	            HttpSession oldSession = request.getSession(false);
 	            if (oldSession != null) {
