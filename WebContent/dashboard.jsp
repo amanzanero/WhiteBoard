@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="whiteboard.DatabaseConnect" %>
 <%@ page import="java.util.Vector" %>
 <%@ page import="java.util.Arrays" %>
@@ -11,9 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/all.min.css">
     <title>WhiteBoard</title>
 </head>
 
@@ -24,8 +23,7 @@
     String user = (u != null) ? u.toString() : "";
     if (!user.equals("")) loggedIn = true;
     else response.sendRedirect("homepage.jsp");  // redirect to homepage if not logged in
-    /* Vector<String> adminQueues = DatabaseConnect.getAdminQueues(user);
-     */
+    /* Vector<String> adminQueues = DatabaseConnect.getAdminQueues(user); */
 %>
 
 <body>
@@ -117,12 +115,9 @@
 					existsError = alreadyExists.toString();
 				}
 			%>
-			<%
-				if (existsError != null) {
-			%>
-			<span style="color:red; font:Times"><%=existsError %></span>
-
-			<%} %>
+			<%	if (existsError != null) { %>
+				<span style="color: red; font-family: monospace"><%= existsError %></span>
+			<% } %>
 		</div>
 
 	</div>
