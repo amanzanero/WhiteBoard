@@ -57,8 +57,20 @@ public class Login extends HttpServlet {
 
 		username = request.getParameter("username");
 		password = request.getParameter("password");
-		if (username != null && username.isEmpty()) username = null;
-		if (password != null && password.isEmpty()) password = null;
+		if (username != null) {
+		    username = username.trim();
+		    if (username.isEmpty()) {
+		    	username = null;
+			}
+		}
+		if (password != null) {
+			password = password.trim();
+			if (password.isEmpty()) {
+				password = null;
+			}
+		}
+
+
 
 		System.out.println("attempting to log in with the following credentials:");
 		System.out.println("------------------------------------------------------");
@@ -102,7 +114,7 @@ public class Login extends HttpServlet {
 	            if (oldSession != null) {
 	                oldSession.invalidate();
 	            }
-	            
+
 	            // create a new session to store the user (5 min duration)
 	            HttpSession newSession = request.getSession(true);
 	            newSession.setMaxInactiveInterval(15 * 60);	// 15 mins
