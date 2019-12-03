@@ -64,7 +64,7 @@
 	                    <% } %>
 	
 	                    <label for="password-box"class="h5 m-1">Password</label>
-	                    <input id="password-box" class="form-control w-100" type="text" name="password" value="<%= password %>">
+	                    <input id="password-box" class="form-control w-100" type="password" name="password" value="<%= password %>">
 	                    <% if (passwordError != null) { %>
 	                        <p id="password-error" class="error-message"><%= passwordError %></p>
 	                    <% } %>

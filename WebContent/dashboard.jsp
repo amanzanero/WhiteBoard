@@ -91,8 +91,7 @@
 										<%String data = DatabaseConnect.getQueueString(queue);%>
 										<%Vector<String> data_vector = new Vector<String>(Arrays.asList(data.split(",")));%>
 										<%for (String visitor : data_vector) { %>
-										<li class="list-group-item"><%=visitor %>
-										</li>
+										<li class="list-group-item"><%=visitor %><button type="button" class="btn btn-link btn-xs" style="float:right">Remove</button></li>
 										<%
 												counter2++;
 											}
