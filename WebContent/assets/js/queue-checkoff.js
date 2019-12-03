@@ -35,17 +35,19 @@ function createHiddenForm() {
         $("<form>").attr({
             id: "checkoff-form",
             method: "post",
-            action: "checkoff"
+            action: "Checkoff"
         }).css("display", "none").append([
             $("<input>").attr({
+                id: "queue-name-form-input",
                 type: "text",
                 name: "queueName",
-                value: true
+                value: null
             }),
             $("<input>").attr({
+                id: "username-form-input",
                 type: "text",
-                name: "logout",
-                value: true
+                name: "userToRemove",
+                value: null
             })
         ])
     );
@@ -56,8 +58,15 @@ function createHiddenForm() {
 
 // makes it so that the form submits when you click the button
 function connectButtonToForm() {
-    $("#logout-button").click(() => {
-        $("#logout-form").submit();
+    // DONT USE ARROW FUNCTIONS, or "this" wont bind properly!
+    $(".remove-user-button").click(function() {
+        const queueName = $(this).attr("data-queue-name");
+        const userToRemove = $(this).attr("data-username");
+        console.log(`removing "${userToRemove}" from "${queueName}"`);
+
+        $("#queue-name-form-input").attr("queueName", queueName);
+        $("#username-form-input").attr("userToRemove", userToRemove);
+        $("#checkoff-form").submit();
     });
 }
 
