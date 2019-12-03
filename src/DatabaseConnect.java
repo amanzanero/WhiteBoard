@@ -1,4 +1,4 @@
-package servlets;
+package whiteboard;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -13,10 +13,10 @@ import java.util.Vector;
 public class DatabaseConnect {
 	private DatabaseConnect() {}
     private static String SQL_database_name = "WhiteBoard";
-	private static String SQL_instance_name = "";
+	private static String SQL_instance_name = "whiteboard-258101:us-central1:whiteboard";
 	private static String SQL_user = "root";
-	private static String SQL_user_password = "5997";
-	private static String SQL_Connection = "jdbc:mysql://localhost:3306/";
+	private static String SQL_user_password = "Usc2019!";
+	private static String SQL_Connection = "jdbc:mysql://google/";
 	
 	private static Connection createConn() {
 		try {
@@ -97,14 +97,14 @@ public class DatabaseConnect {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		Connection conn = null;
-		boolean success = true;
+		boolean success = false;
 		try {
 			conn = createConn();
 			pst = conn.prepareStatement("SELECT * FROM Queues WHERE queueName = ?");
 			pst.setString(1, queueName);
 			rs = pst.executeQuery();
-			if(!rs.next()) {
-				success= false;
+			if(rs.next()) {
+				success= true;
 			}
 			
 		}catch(SQLException sqle) {
@@ -292,6 +292,139 @@ public class DatabaseConnect {
 		return success==true?true:false;
 	
 	}
+    
+    public static void addNewQueue(String queueName) {
+    	if(queueName == null || queueName.isEmpty()) {
+    		return;
+    	}
+    	else {
+    		Connection conn = null;
+    		PreparedStatement ps = null;
+    		try {
+    			conn = createConn();
+    			ps = conn.prepareStatement("INSERT INTO Queues(queueName,queueOrder) VALUES(?,'')");
+    			ps.setString(1, queueName);;
+    			ps.executeUpdate();
+    		}catch(SQLException sqle) {
+    			System.out.println(sqle.getMessage());
+    		}finally{terminateConnection(conn,null,ps);}
+    	}
+    }
+    
+    public static void addAdmintoQueue(String adminName, String queueName) {
+    	if(queueName == null || queueName.isEmpty() || adminName == null ||adminName.isEmpty()) {
+    		return ;
+    	}
+    	else {
+    		Connection conn = null;
+        	ResultSet rs = null;
+        	ResultSet rs2 = null;
+        	PreparedStatement ps = null;
+        	PreparedStatement ps2 = null;
+        	PreparedStatement ps3 = null;
+        	Integer userID = null;
+        	Integer queueID = null;
+        	
+        	try {
+        		conn = createConn();
+        		ps = conn.prepareStatement("SELECT u.UserID FROM Users u WHERE userName = ? ");
+        		ps.setString(1, adminName);
+        		rs = ps.executeQuery();
+        		rs.first(); // should only have one because usernames are unique
+        		userID = rs.getInt("UserID");
+        		ps2 = conn.prepareStatement("SELECT q.queueID FROM Queues q WHERE queueName = ?");
+        		ps2.setString(1, queueName);
+        		rs2 = ps2.executeQuery();
+        		rs2.first();//should only return one since queueNames are unique
+        		queueID = rs2.getInt("queueID");
+        		ps3 = conn.prepareStatement("INSERT INTO Admins(UserID, queueID) VALUES(?,?)");
+        		ps3.setInt(1, userID);
+        		ps3.setInt(2,queueID);
+        		ps3.executeUpdate();
+        	}catch(SQLException sqle) {
+        		System.out.println(sqle.getMessage());
+        	}finally {
+        		terminateConnection(conn,rs,ps);
+        		try {
+        			if(rs2!=null) {
+        				rs2.close();
+        			}
+        			if(ps2!=null) {
+        				ps2.close();
+        			}
+        			if(ps3!=null) {
+        				ps3.close();
+        			}
+        		}catch(SQLException sqle) {
+        			System.out.println(sqle.getMessage());
+        		}
+        	}
+    	}
+    }
+    
+    public static boolean alreadyAdmin(String adminName, String queueName) {
+    	boolean success = false;
+    	if(queueName == null || queueName.isEmpty() || adminName == null ||adminName.isEmpty()) {
+    		return false;
+    	}
+    	else {
+    		Connection conn = null;
+    		ResultSet rs = null;
+    		ResultSet rs2 = null;
+    		ResultSet rs3 = null;
+    		PreparedStatement ps = null;
+    		PreparedStatement ps2 = null;
+    		PreparedStatement ps3 = null;
+    		
+    		Integer userID = null;
+    		Integer queueID = null;
+    		
+    		
+    		try {
+    			conn = createConn();
+        		ps = conn.prepareStatement("SELECT u.UserID FROM Users u WHERE userName = ? ");
+        		ps.setString(1, adminName);
+        		rs = ps.executeQuery();
+        		rs.first(); // should only have one because usernames are unique
+        		userID = rs.getInt("UserID");
+        		ps2 = conn.prepareStatement("SELECT q.queueID FROM Queues q WHERE queueName = ?");
+        		ps2.setString(1, queueName);
+        		rs2 = ps2.executeQuery();
+        		rs2.first();//should only return one since queueNames are unique
+        		queueID = rs2.getInt("queueID");
+        		
+        		ps3 = conn.prepareStatement("SELECT * FROM Admins WHERE UserID = ? AND queueID = ?");
+        		ps3.setInt(1, userID);
+        		ps3.setInt(2,queueID);
+        		rs3 = ps3.executeQuery();
+        		if(rs3.next()) {
+        			success = false;
+        		}
+        		
+    		}catch(SQLException sqle) {
+    			System.out.println(sqle.getMessage());
+    		}finally{terminateConnection(conn,rs,ps);
+    			try {
+    				if(rs2!=null) {
+    					rs2.close();
+    				}
+    				if(rs3!=null) {
+    					rs3.close();
+    				}
+    				if(ps2!=null) {
+    					ps2.close();
+    				}
+    				if(ps3!=null) {
+    					ps3.close();
+    				}
+    			}catch(SQLException sqle) {
+    				System.out.println(sqle.getMessage());
+    			}
+    		}
+    	}
+    	return success;
+    	
+    }
 
     public static void updateUserQueueInfo(String userName, String queueName)
 	{
@@ -371,7 +504,8 @@ public class DatabaseConnect {
 			terminateConnection(conn,null,pst);
 		}
 	}
-
+ 
+    //unused
 	//returns null if not found, admin string otherwise
     public static String getAdminString(String queueName) {
 		String unparsedOrder=null;
@@ -394,7 +528,8 @@ public class DatabaseConnect {
 		}
 		return unparsedOrder;
 	}
-
+    
+   
     public static Boolean logIn(String username, String password) {
     	PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -429,7 +564,7 @@ public class DatabaseConnect {
 		Vector<String> results = new Vector<>();
 		try {
 			conn = createConn();
-			pst = conn.prepareStatement("SELECT* FROM Queues");
+			pst = conn.prepareStatement("SELECT * FROM Queues");
 			rs = pst.executeQuery();
 			while (rs.next()) {
 				results.add(rs.getString("queueName"));
