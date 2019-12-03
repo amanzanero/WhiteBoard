@@ -16,9 +16,8 @@
                                                                \/____/
 */
 
-package myServelets;
+package servlets;
 
-import myServelets.DatabaseManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -45,12 +44,12 @@ public class Register extends HttpServlet {
 	// valid names are only letters and spaces
     private boolean isValidUsername(String username) {
 		if (username == null) return false;
-    	return !username.isBlank();
+    	return !username.isEmpty();
 	}
 
 	private boolean isValidPassword(String password) {
 		if (password == null) return false;
-		return !password.isBlank();
+		return !password.isEmpty();
 	}
 
 
@@ -65,9 +64,9 @@ public class Register extends HttpServlet {
 		username = request.getParameter("username");
 		password = request.getParameter("password");
 		pwConfirm = request.getParameter("pw-confirm");
-		if (username != null && username.isBlank()) username = null;
-		if (password != null && password.isBlank()) password = null;
-		if (pwConfirm != null && pwConfirm.isBlank()) pwConfirm = null;
+		if (username != null && username.isEmpty()) username = null;
+		if (password != null && password.isEmpty()) password = null;
+		if (pwConfirm != null && pwConfirm.isEmpty()) pwConfirm = null;
 
 		System.out.println("attempting to register with the following credentials:");
 		System.out.println("------------------------------------------------------");
@@ -103,7 +102,7 @@ public class Register extends HttpServlet {
 			forwardMe = sendBack;
 			canRegister = false;
 		}
-		else if (DatabaseManager.hasUser(username)) {
+		else if (DatabaseConnect.checkIfUserExists(username)) {
 			System.out.println("username already taken");
 			request.setAttribute("usernameError", "This username is already taken.");
 			forwardMe = sendBack;
@@ -111,7 +110,7 @@ public class Register extends HttpServlet {
 		}
 
 		if (canRegister) {
-			DatabaseManager.registerUser(username, password);
+			DatabaseConnect.createUser(username, password);
 			
 			// if there's an old session, end it
             HttpSession oldSession = request.getSession(false);
