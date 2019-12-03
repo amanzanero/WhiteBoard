@@ -32,17 +32,22 @@ $(document).ready(() => {
 // the logout button
 function createHiddenForm() {
     $("body").append(
-            $("<form>").attr({
-                id: "logout-form",
-                method: "post",
-                action: "Logout"
-            }).css("display", "none").append([
-                $("<input>").attr({
-                    type: "text",
-                    name: "logout",
-                    value: true
-                })
-            ])
+        $("<form>").attr({
+            id: "checkoff-form",
+            method: "post",
+            action: "checkoff"
+        }).css("display", "none").append([
+            $("<input>").attr({
+                type: "text",
+                name: "queueName",
+                value: true
+            }),
+            $("<input>").attr({
+                type: "text",
+                name: "logout",
+                value: true
+            })
+        ])
     );
 }
 
