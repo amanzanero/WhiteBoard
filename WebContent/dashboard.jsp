@@ -58,7 +58,7 @@
 		Vector<String> queues = DatabaseConnect.getUserQueues(user);
 	%>
 	<div class="page-content container-fluid d-flex flex-column align-items-center">
-		<div class="card w-100 d-flex flex-column align-items-center m-1" style="padding: 1em;">
+		<div class="card w-100 d-flex flex-column m-1" style="padding: 1em;">
 			<ul class="list-group">
 				<li class="list-group-item d-flex justify-content-center"><h3><%=user %>'s Dashboard</h3></li>
 				<li class="list-group-item">
