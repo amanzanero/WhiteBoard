@@ -75,16 +75,19 @@
 							for (String queue : queues) {
 						%>
 						<div class="card">
-							<div class="card-header" id="heading<%=counter %>">
+							<div class="card-header" id="heading<%= counter %>">
 								<h5 class="mb-0">
-									<button class="btn btn-link" data-toggle="collapse" data-target="#collapse<%=counter %>"
-											aria-expanded="true" aria-controls="collapse<%=counter %>">
+									<button class="btn btn-link" data-toggle="collapse" data-target="#collapse<%= counter %>"
+											aria-expanded="true" aria-controls="collapse<%= counter %>">
 										<%=queue %>
-									</button><button style="float:right" class="btn btn-link">Add Admin</button>
+									</button>
+									<button style="float:right" class="btn btn-link add-admin-open-modal"
+											data-toggle="modal" data-target="#add-admin-modal"
+											data-queue-name="<%= queue %>">Add Admin</button>
 								</h5>
 							</div>
 
-							<div id="collapse<%=counter %>" class="collapse" aria-labelledby="heading<%=counter %>"
+							<div id="collapse<%= counter %>" class="collapse" aria-labelledby="heading<%= counter %>"
 								 data-parent="#accordion">
 								<div class="card-body">
 									<ul class="list-group">
@@ -96,7 +99,7 @@
 										else{
 											data_vector = new Vector<String>(Arrays.asList(data.split(",")));
 										}
-										
+
 										for (String visitor : data_vector) { %>
 										<li class="list-group-item">
 											<%= visitor %>
@@ -165,6 +168,36 @@
 		</div>
 	</div>
 
+	<!-- for adding an admin -->
+	<div class="modal fade" id="add-admin-modal" tabindex="-1" role="dialog" aria-labelledby="add-admin-label"
+		 aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="add-admin-label">Add Administrator</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="addAdmin-form" action="AddAdminToQueue" method="post">
+						<div class="form-group">
+							<label for="addAdmin-name-input" class="col-form-label">Admin Name</label>
+							<input type="text" class="form-control" id="addAdmin-queueName-input" name="queueName" style="display: none">
+							<input type="text" class="form-control" id="addAdmin-name-input" name="adminName">
+						</div>
+						<div class="form-group">
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-primary" id="add-admin-button">Add</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- for deleting a queue -->
 	<div class="modal fade" id="delete-queue-modal" tabindex="-1" role="dialog" aria-labelledby="delete-queue-label"
 		 aria-hidden="true">
@@ -194,6 +227,6 @@
 	<script type="text/javascript" src="assets/js/jquery-3.4.1.min.js"></script>
 	<script type="text/javascript" src="assets/js/popper.min.js"></script>
 	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="assets/js/queue-checkoff-and-delete.js"></script>
+	<script type="text/javascript" src="assets/js/dashboard.js"></script>
 </body>
 </html>

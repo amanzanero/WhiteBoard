@@ -1,11 +1,12 @@
 /*
-       document : queue-checkoff-and-delete.js
+       document : dashboard.js
      created on : 2019 december 2, 18:23 pm (monday)
          author : audrey bongalon
       USC email : bongalon@usc.edu
          USC ID : 9152272619
     description : csci201 final project - js for checking someone off the queue
                                           or deleting an entire queue
+                                          or adding an admin for the queue
 
 
                                       88
@@ -87,6 +88,11 @@ $(document).ready(() => {
                 console.log(result);
             }
         });
+    });
+
+    $(".add-admin-open-modal").click(function() {
+        console.log(`adding admin queue`)
+        $("#addAdmin-queueName-input").val($(this).attr("data-queue-name"));
     });
 });
 
