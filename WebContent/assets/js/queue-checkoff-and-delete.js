@@ -61,7 +61,7 @@ $(document).ready(() => {
         console.log(`deleting queue ${queueToDelete}`)
         $.ajax({
             type: "POST",
-            url: "CheckoffUserQueue",
+            url: "DeleteQueue",
             data: {
                 queueToDelete: queueToDelete,
             },
