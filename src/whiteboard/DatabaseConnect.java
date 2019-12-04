@@ -405,7 +405,7 @@ public class DatabaseConnect {
         		ps3.setInt(2,queueID);
         		rs3 = ps3.executeQuery();
         		if(rs3.next()) {
-        			success = false;
+        			success = true;
         		}
 
     		}catch(SQLException sqle) {
@@ -858,15 +858,26 @@ public class DatabaseConnect {
 
 		Connection conn = null;
 		PreparedStatement ps = null;
+		PreparedStatement ps2 = null;
+		PreparedStatement ps3 = null;
 		ResultSet rs = null;
 	
 		try
 		{
 			conn = createConn();
-			ps = conn.prepareStatement("DELETE FROM Queues WHERE queueName=? ");
+			ps = conn.prepareStatement("SELECT * FROM Queues WHERE queueName=?");
 			ps.setString(1, queueName);
-			ps.executeUpdate();
-	
+			rs = ps.executeQuery();
+			if(rs.next())
+			{
+				int queueID = rs.getInt("queueID");
+				ps2 = conn.prepareStatement("DELETE FROM Admins Where queueID=?");
+				ps2.setInt(1, queueID);
+				ps2.executeUpdate();
+				ps3 = conn.prepareStatement("DELETE FROM Queues WHERE queueName=?");
+				ps3.setString(1, queueName);
+				ps3.executeUpdate();
+			}
 		}
 		catch(SQLException e)
 		{
@@ -876,9 +887,11 @@ public class DatabaseConnect {
 		{
 			try
 			{
-				 if(rs != null) rs.close();
-				 if(ps != null) ps.close();
-				 if (conn != null) conn.close();
+				if(rs != null) rs.close();
+				if(ps != null) ps.close();
+				if(ps2 != null) ps2.close();
+				if(ps3 != null) ps3.close();
+				if (conn != null) conn.close();
 			 }
 			 catch (SQLException sqle)
 			 {
