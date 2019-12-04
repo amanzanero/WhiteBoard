@@ -110,14 +110,14 @@ public class Register extends HttpServlet {
 		}
 
 		if (canRegister) {
-			DatabaseConnect.createUser(username, password);
-			
+			DatabaseConnect.createUser(username, SHA256.hash(password));
+
 			// if there's an old session, end it
             HttpSession oldSession = request.getSession(false);
             if (oldSession != null) {
                 oldSession.invalidate();
             }
-            
+
             // create a new session to store the user (5 min duration)
             HttpSession newSession = request.getSession(true);
             newSession.setMaxInactiveInterval(5 * 60);
