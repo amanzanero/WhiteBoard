@@ -108,7 +108,8 @@ public class Login extends HttpServlet {
 		}
 
 		if (canLogIn) {
-			if (DatabaseConnect.logIn(username, SHA256.hash(password))) {
+			// username as salt
+			if (DatabaseConnect.logIn(username, SHA256.hash(username + password))) {
 				// if there's an old session, end it
 	            HttpSession oldSession = request.getSession(false);
 	            if (oldSession != null) {
