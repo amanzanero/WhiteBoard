@@ -66,13 +66,13 @@
                     <% } %>
 
                     <label for="password-box" class="h5 m-1">Password</label>
-                    <input id="password-box" class="form-control w-100" type="text" name="password" value="<%= password %>">
+                    <input id="password-box" class="form-control w-100" type="password" name="password" value="<%= password %>">
                     <% if (passwordError != null) { %>
                         <p id="password-error" class="error-message"><%= passwordError %></p>
                     <% } %>
 
                     <label for="pw-confirm-box" class="h5 m-1">Confirm Password</label>
-                    <input id="pw-confirm-box" class="form-control w-100" type="text" name="pw-confirm">
+                    <input id="pw-confirm-box" class="form-control w-100" type="password" name="pw-confirm">
                     <% if (confirmError != null) { %>
                         <p id="pw-confirm-error" class="error-message"><%= confirmError %></p>
                     <% } %>
