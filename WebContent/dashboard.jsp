@@ -88,9 +88,16 @@
 								 data-parent="#accordion">
 								<div class="card-body">
 									<ul class="list-group">
-										<%String data = DatabaseConnect.getQueueString(queue);%>
-										<%Vector<String> data_vector = new Vector<String>(Arrays.asList(data.split(",")));%>
-										<%for (String visitor : data_vector) { %>
+										<%String data = DatabaseConnect.getQueueString(queue);
+										Vector<String> data_vector;
+										if(data == null){
+											data_vector = new Vector<String>();
+										}
+										else{
+											data_vector = new Vector<String>(Arrays.asList(data.split(",")));
+										}
+										
+										for (String visitor : data_vector) { %>
 										<li class="list-group-item">
 											<%= visitor %>
 											<button type="button" class="btn btn-link btn-xs remove-user-button" style="float:right"
@@ -190,4 +197,3 @@
 	<script type="text/javascript" src="assets/js/queue-checkoff-and-delete.js"></script>
 </body>
 </html>
-
