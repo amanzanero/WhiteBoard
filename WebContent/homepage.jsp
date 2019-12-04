@@ -118,7 +118,7 @@
                 Go directly to the Queue you want!
             </h3>
             <form action="ToQueue" class="form-inline my-1 my-lg-0 d-flex justify-content-center w-100">
-                <input name="queueName" class="form-control mr-sm-1 col-sm-8" type="search" placeholder="CSCI 201">
+                <input name="queueName" class="form-control mr-sm-1 col-sm-8" type="search" placeholder="CSCI201">
                 <button class="btn btn-outline-dark my-sm-2" type="submit">Go to Queue</button>
             </form>
             <p><%= (qErr == null) ? "" : "Queue does not exist!" %>

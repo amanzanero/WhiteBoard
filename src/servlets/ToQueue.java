@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/ToQueue")
 public class ToQueue extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -43,7 +43,7 @@ public class ToQueue extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 		else {
-			response.sendRedirect("/WhiteBoard/queue.jsp?course="+qName);
+			response.sendRedirect("queue.jsp?course="+qName);
 		}
 	}
 }
