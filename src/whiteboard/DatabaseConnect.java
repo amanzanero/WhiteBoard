@@ -17,7 +17,7 @@ public class DatabaseConnect {
 	private static String SQL_user = "root";
 	private static String SQL_user_password = "Usc2019!";
 	private static String SQL_Connection = "jdbc:mysql://google/";
-	
+
 	private static Connection createConn() {
 		try {
 			if (SQL_Connection.contains("google")) {
@@ -49,8 +49,8 @@ public class DatabaseConnect {
 			System.out.println(sqle.getMessage());
 		}
     }
-    
-    
+
+
     public static boolean checkIfUserExists(String userName) {
 		PreparedStatement pst = null;
         ResultSet rs = null;
@@ -69,7 +69,7 @@ public class DatabaseConnect {
 		}finally {terminateConnection(conn,rs,pst);}
 		return success;
     }
-    
+
     public static boolean checkIfVisitorExists(String userName) {
 		PreparedStatement pst = null;
         ResultSet rs = null;
@@ -93,7 +93,7 @@ public class DatabaseConnect {
 		}finally {terminateConnection(conn,rs,pst);}
 		return success;
     }
-    
+
     public static boolean queueExists(String queueName) {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -107,16 +107,16 @@ public class DatabaseConnect {
 			if(rs.next()) {
 				success= true;
 			}
-			
+
 		}catch(SQLException sqle) {
 			System.out.println(sqle.getMessage());
 		}finally {terminateConnection(conn,rs,pst);}
 		return success;
     }
-    
+
     public static String getQueueString(String queueName)
 	{
-		
+
 		String resultStr = "";
 		if(queueName == null || queueName.isEmpty())
 		{
@@ -132,7 +132,7 @@ public class DatabaseConnect {
 				ps= conn.prepareStatement("SELECT * FROM Queues WHERE queueName=?");
 				ps.setString(1,queueName);
 				rs = ps.executeQuery();
-			
+
 				if(rs.next())
 				{
 					if(rs.getString("queueOrder").trim().isEmpty()) {
@@ -140,14 +140,14 @@ public class DatabaseConnect {
 					}
 					else {
 						resultStr = rs.getString("queueOrder");
-				
+
 					}
 				}
 			}
 			catch(SQLException e)
 			 {
 				 System.out.println(e.getMessage());
-			 } 
+			 }
 			 finally {terminateConnection(conn, rs, ps);}
 		}
 		return resultStr;
@@ -155,7 +155,7 @@ public class DatabaseConnect {
 
     public static boolean setQueueString(String queueName, String updatedQueue)
 	{
-		
+
 		boolean result_ = false;
 		if(queueName == null || queueName.isEmpty())
 		{
@@ -166,7 +166,7 @@ public class DatabaseConnect {
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 			try
-			{   
+			{
                 if(queueExists(queueName))
 				{
                     conn = createConn();
@@ -180,9 +180,9 @@ public class DatabaseConnect {
 			catch(SQLException e)
 			 {
 				 System.out.println(e.getMessage());
-			 } 
-			 finally {terminateConnection(conn, rs, ps); } 
-				
+			 }
+			 finally {terminateConnection(conn, rs, ps); }
+
 			 }
 		return result_;
 	}
@@ -190,7 +190,7 @@ public class DatabaseConnect {
 	public static boolean createUser(String userName, String hashedPass_)
 	{
 		boolean success = true;
-		
+
 		if(userName.isEmpty()) {
 			success=false;
 		}
@@ -218,17 +218,17 @@ public class DatabaseConnect {
 			catch(SQLException e)
 			 {
 				 System.out.println(e.getMessage());
-			 } 
+			 }
 			 finally {terminateConnection(conn, rs, ps);}
 		}
-		
+
 		return success;
-	} 
+	}
 
     public static boolean deleteUser(String userName)
 	{
 		boolean success = false;
-		
+
 		if(userName == null || userName.isEmpty())
 		{
 			success=false;
@@ -244,7 +244,7 @@ public class DatabaseConnect {
 				ps= conn.prepareStatement("SELECT * FROM Users WHERE username=?");
 				ps.setString(1,userName);
 				rs = ps.executeQuery();
-			
+
 				if(rs.next())
 				{
 					if(rs.getString("hashedPass") == "")
@@ -267,39 +267,39 @@ public class DatabaseConnect {
 			catch(SQLException e)
 			 {
 				 System.out.println(e.getMessage());
-			 } 
-			 finally 
+			 }
+			 finally
 			 {
-				try 
+				try
 				{
-					 if (rs != null) 
+					 if (rs != null)
 					 {
 						 rs.close();
 					 }
-					 if (ps != null) 
+					 if (ps != null)
 					 {
 						 ps.close();
 					 }
-					 if (ps2 != null) 
+					 if (ps2 != null)
 					 {
 						 ps2.close();
 					 }
-					 if (conn != null) 
+					 if (conn != null)
 					 {
 						 conn.close();
 					 }
-				 } 
-				 catch (SQLException sqle) 
+				 }
+				 catch (SQLException sqle)
 				 {
 					 System.out.println(sqle.getMessage());
 				 }
 			 }
 		}
-		
+
 		return success==true?true:false;
-	
+
 	}
-    
+
     public static void addNewQueue(String queueName) {
     	if(queueName == null || queueName.isEmpty()) {
     		return;
@@ -317,7 +317,7 @@ public class DatabaseConnect {
     		}finally{terminateConnection(conn,null,ps);}
     	}
     }
-    
+
     public static void addAdmintoQueue(String adminName, String queueName) {
     	if(queueName == null || queueName.isEmpty() || adminName == null ||adminName.isEmpty()) {
     		return ;
@@ -331,7 +331,7 @@ public class DatabaseConnect {
         	PreparedStatement ps3 = null;
         	Integer userID = null;
         	Integer queueID = null;
-        	
+
         	try {
         		conn = createConn();
         		ps = conn.prepareStatement("SELECT u.UserID FROM Users u WHERE userName = ? ");
@@ -368,7 +368,7 @@ public class DatabaseConnect {
         	}
     	}
     }
-    
+
     public static boolean alreadyAdmin(String adminName, String queueName) {
     	boolean success = false;
     	if(queueName == null || queueName.isEmpty() || adminName == null ||adminName.isEmpty()) {
@@ -382,11 +382,11 @@ public class DatabaseConnect {
     		PreparedStatement ps = null;
     		PreparedStatement ps2 = null;
     		PreparedStatement ps3 = null;
-    		
+
     		Integer userID = null;
     		Integer queueID = null;
-    		
-    		
+
+
     		try {
     			conn = createConn();
         		ps = conn.prepareStatement("SELECT u.UserID FROM Users u WHERE userName = ? ");
@@ -399,7 +399,7 @@ public class DatabaseConnect {
         		rs2 = ps2.executeQuery();
         		rs2.first();//should only return one since queueNames are unique
         		queueID = rs2.getInt("queueID");
-        		
+
         		ps3 = conn.prepareStatement("SELECT * FROM Admins WHERE UserID = ? AND queueID = ?");
         		ps3.setInt(1, userID);
         		ps3.setInt(2,queueID);
@@ -407,7 +407,7 @@ public class DatabaseConnect {
         		if(rs3.next()) {
         			success = false;
         		}
-        		
+
     		}catch(SQLException sqle) {
     			System.out.println(sqle.getMessage());
     		}finally{terminateConnection(conn,rs,ps);
@@ -430,7 +430,7 @@ public class DatabaseConnect {
     		}
     	}
     	return success;
-    	
+
     }
 
     public static void updateUserQueueInfo(String userName, String queueName)
@@ -452,7 +452,7 @@ public class DatabaseConnect {
 				ps= conn.prepareStatement("SELECT * FROM Users WHERE username=?");
 				ps.setString(1,userName);
 				rs = ps.executeQuery();
-			
+
 				if(rs.next())
 				{
 					ps2 = conn.prepareStatement("Select * from Queues WHERE queueName=?");
@@ -476,10 +476,10 @@ public class DatabaseConnect {
 			catch(SQLException e)
 			 {
 				 System.out.println(e.getMessage());
-			 } 
-			 finally 
+			 }
+			 finally
 			 {
-				try 
+				try
 				{
 					 if(rs != null) rs.close();
 					 if(rs2 != null) rs2.close();
@@ -487,8 +487,8 @@ public class DatabaseConnect {
 					 if(ps2 != null) ps2.close();
 					 if(ps3 != null) ps3.close();
 					 if (conn != null) conn.close();
-				 } 
-				 catch (SQLException sqle) 
+				 }
+				 catch (SQLException sqle)
 				 {
 					 System.out.println(sqle.getMessage());
 				 }
@@ -511,7 +511,7 @@ public class DatabaseConnect {
 			terminateConnection(conn,null,pst);
 		}
 	}
- 
+
     //unused
 	//returns null if not found, admin string otherwise
     public static String getAdminString(String queueName) {
@@ -527,7 +527,7 @@ public class DatabaseConnect {
 			if(rs.next()) {
 				unparsedOrder = rs.getString("adminList");
 			}
-			
+
 		}catch(SQLException sqle) {
 			System.out.println(sqle.getMessage());
 		}finally {
@@ -535,8 +535,8 @@ public class DatabaseConnect {
 		}
 		return unparsedOrder;
 	}
-    
-   
+
+
     public static Boolean logIn(String username, String password) {
     	PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -555,7 +555,7 @@ public class DatabaseConnect {
 			else {
 				result = false;
 			}
-			
+
 		}catch(SQLException sqle) {
 			System.out.println(sqle.getMessage());
 		}finally {
@@ -563,7 +563,7 @@ public class DatabaseConnect {
 		}
 		return result;
     }
-    
+
     public static Vector<String> getAllQueues() {
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -576,7 +576,7 @@ public class DatabaseConnect {
 			while (rs.next()) {
 				results.add(rs.getString("queueName"));
 			}
-			
+
 		}catch(SQLException sqle) {
 			System.out.println(sqle.getMessage());
 		}finally {
@@ -584,7 +584,7 @@ public class DatabaseConnect {
 		}
 		return results;
 	}
-    
+
     public static Vector<String> getVisitorQueues(String username) {
     	Connection conn = null;
 		PreparedStatement pst = null;
@@ -600,7 +600,7 @@ public class DatabaseConnect {
 				String[] queues = qs.split(",");
 				results = new Vector<String>(Arrays.asList(queues));
 			}
-			
+
 		}catch(SQLException sqle) {
 			System.out.println(sqle.getMessage());
 		}finally {
@@ -608,7 +608,7 @@ public class DatabaseConnect {
 		}
 		return results;
     }
-    
+
     public static void addVisitor(String visitor_name, String queue_name) {
     	Connection conn = null;
 		PreparedStatement pst = null;
@@ -636,14 +636,14 @@ public class DatabaseConnect {
 			pst.setString(1, String.join(",", queues));
 			pst.setString(2, visitor_name);
 			pst.execute();
-	
+
 		}catch(SQLException sqle) {
 			System.out.println(sqle.getMessage());
 		}finally {
 			terminateConnection(conn,null,pst);
 		}
     }
-    
+
     public static Vector<String> getUserQueues(String username) {
     	Connection conn = null;
 		PreparedStatement pst = null;
@@ -657,7 +657,7 @@ public class DatabaseConnect {
 			while (rs.next()) {
 				results.add(rs.getString("queueName"));
 			}
-			
+
 		}catch(SQLException sqle) {
 			System.out.println(sqle.getMessage());
 		}finally {
@@ -665,181 +665,181 @@ public class DatabaseConnect {
 		}
 		return results;
     }
-    public static boolean deleteVisitor(String userName)	
-	{	
-		boolean success = false;	
+    public static boolean deleteVisitor(String userName)
+	{
+		boolean success = false;
 
-		if(userName == null || userName.isEmpty())	
-		{	
-			success=false;	
-		}	
-		else {	
-			Connection conn = null;	
-			PreparedStatement ps = null;	
-			PreparedStatement ps2 = null;	
-			ResultSet rs = null;	
-			try	
-			{	
-				conn = createConn();	
-				ps= conn.prepareStatement("SELECT * FROM Visitors WHERE userName=?");	
-				ps.setString(1,userName);	
-				rs = ps.executeQuery();	
-				if(rs.next())	
-				{		
-					int queuesInCheck = rs.getInt("numQueuesIn");	
-					if(queuesInCheck == 0)	
-					{	
-						ps2= conn.prepareStatement("DELETE FROM Visitors WHERE userName=?");	
-						ps2.setString(1,userName);	
-						ps2.executeUpdate();	
-						success = true;	
-					}	
-					else success = false;	
-				}	
-				else	
-				{	
-					success= false;	
-				}	
-			}	
-			catch(SQLException e)	
-			 {	
-				 System.out.println(e.getMessage());	
-			 } 	
-			 finally 	
-			 {	
-				try 	
-				{	
-					 if (rs != null) 	
-					 {	
-						 rs.close();	
-					 }	
-					 if (ps != null) 	
-					 {	
-						 ps.close();	
-					 }	
-					 if (ps2 != null) 	
-					 {	
-						 ps2.close();	
-					 }	
-					 if (conn != null) 	
-					 {	
-						 conn.close();	
-					 }	
-				 } 	
-				 catch (SQLException sqle) 	
-				 {	
-					 System.out.println(sqle.getMessage());	
-				 }	
-			 }	
-		}	
+		if(userName == null || userName.isEmpty())
+		{
+			success=false;
+		}
+		else {
+			Connection conn = null;
+			PreparedStatement ps = null;
+			PreparedStatement ps2 = null;
+			ResultSet rs = null;
+			try
+			{
+				conn = createConn();
+				ps= conn.prepareStatement("SELECT * FROM Visitors WHERE userName=?");
+				ps.setString(1,userName);
+				rs = ps.executeQuery();
+				if(rs.next())
+				{
+					int queuesInCheck = rs.getInt("numQueuesIn");
+					if(queuesInCheck == 0)
+					{
+						ps2= conn.prepareStatement("DELETE FROM Visitors WHERE userName=?");
+						ps2.setString(1,userName);
+						ps2.executeUpdate();
+						success = true;
+					}
+					else success = false;
+				}
+				else
+				{
+					success= false;
+				}
+			}
+			catch(SQLException e)
+			 {
+				 System.out.println(e.getMessage());
+			 }
+			 finally
+			 {
+				try
+				{
+					 if (rs != null)
+					 {
+						 rs.close();
+					 }
+					 if (ps != null)
+					 {
+						 ps.close();
+					 }
+					 if (ps2 != null)
+					 {
+						 ps2.close();
+					 }
+					 if (conn != null)
+					 {
+						 conn.close();
+					 }
+				 }
+				 catch (SQLException sqle)
+				 {
+					 System.out.println(sqle.getMessage());
+				 }
+			 }
+		}
 
-		return success==true?true:false;	
+		return success==true?true:false;
 
-	}	
+	}
 
-	/*	
-		int Option is used to determine if we're adding or removing queues for a visitor	
-		Only two options 1 & 2	
-		1: Remove queue	
-		2: Add queue	
-	*/	
-	public static void updateVisitorQueueInfo(String userName, String queueName, int option)	
-	{	
-		if(userName == null || userName.isEmpty())	
-		{	
-			return;	
-		}	
-		else {	
-			Connection conn = null;	
-			PreparedStatement ps = null;	
-			PreparedStatement ps2 = null;	
-			PreparedStatement ps3 = null;	
-			ResultSet rs = null;	
-			ResultSet rs2 = null;	
-			try	
-			{	
-				conn = createConn();	
-				//remove queue	
-				if(option == 1)	
-				{	
-					ps= conn.prepareStatement("SELECT * FROM Visitors WHERE userName=?");	
-					ps.setString(1,userName); 	
-					rs = ps.executeQuery();	
-					if(rs.next())	
-					{	
-						String queuesIn = rs.getString("queuesWaitingIn");	
-						int numQueues = rs.getInt("numQueuesIn");	
-						numQueues -= 1;	
-						Vector<String> queue_vector = new Vector<String>(Arrays.asList(queuesIn.split(",")));	
-						int index = queue_vector.indexOf(queueName);	
-						queue_vector.remove(index);	
-						StringBuilder str = new StringBuilder();	
-						for(int i=0;i<queue_vector.size();i++)	
-						{	
-							str.append(queue_vector.get(i).trim());	
-							if(i < (queue_vector.size() -1)) str.append(",");	
-						}	
-						queuesIn = str.length()==0?"":str.toString();	
-						ps3 = conn.prepareStatement("UPDATE Visitors SET queuesWaitingIn=? , numQueuesIn=? WHERE userName=?");	
-						ps3.setString(1, queuesIn);	
-						ps3.setInt(2, numQueues);	
-						ps3.setString(3, userName);	
-						ps3.executeUpdate();		
-					}	
-				}	
-				//add queue	
-				else	
-				{	
-					ps= conn.prepareStatement("SELECT * FROM Visitors WHERE userName=?");	
-					ps.setString(1,userName); 	
-					rs = ps.executeQuery();	
-					if(rs.next())	
-					{	
-						String queuesIn = rs.getString("queuesWaitingIn");	
-						int numQueues = rs.getInt("numQueuesIn");	
-						numQueues += 1;	
-						Vector<String> queue_vector = new Vector<String>(Arrays.asList(queuesIn.split(",")));	
-						queue_vector.add(queueName.trim());	
-						StringBuilder str = new StringBuilder();	
-						for(int i=0;i<queue_vector.size();i++)	
-						{	
-							if(!queue_vector.get(i).trim().isEmpty())	
-							{	
-								str.append(queue_vector.get(i).trim());	
-								if(i < (queue_vector.size() -1)) str.append(",");	
-							}	
-						}	
-						queuesIn = str.toString();	
-						ps3 = conn.prepareStatement("UPDATE Visitors SET queuesWaitingIn=? , numQueuesIn=? WHERE userName=?");	
-						ps3.setString(1, queuesIn);	
-						ps3.setInt(2, numQueues);	
-						ps3.setString(3, userName);	
-						ps3.executeUpdate();		
-					}	
-				}	
+	/*
+		int Option is used to determine if we're adding or removing queues for a visitor
+		Only two options 1 & 2
+		1: Remove queue
+		2: Add queue
+	*/
+	public static void updateVisitorQueueInfo(String userName, String queueName, int option)
+	{
+		if(userName == null || userName.isEmpty())
+		{
+			return;
+		}
+		else {
+			Connection conn = null;
+			PreparedStatement ps = null;
+			PreparedStatement ps2 = null;
+			PreparedStatement ps3 = null;
+			ResultSet rs = null;
+			ResultSet rs2 = null;
+			try
+			{
+				conn = createConn();
+				//remove queue
+				if(option == 1)
+				{
+					ps= conn.prepareStatement("SELECT * FROM Visitors WHERE userName=?");
+					ps.setString(1,userName);
+					rs = ps.executeQuery();
+					if(rs.next())
+					{
+						String queuesIn = rs.getString("queuesWaitingIn");
+						int numQueues = rs.getInt("numQueuesIn");
+						numQueues -= 1;
+						Vector<String> queue_vector = new Vector<String>(Arrays.asList(queuesIn.split(",")));
+						int index = queue_vector.indexOf(queueName);
+						queue_vector.remove(index);
+						StringBuilder str = new StringBuilder();
+						for(int i=0;i<queue_vector.size();i++)
+						{
+							str.append(queue_vector.get(i).trim());
+							if(i < (queue_vector.size() -1)) str.append(",");
+						}
+						queuesIn = str.length()==0?"":str.toString();
+						ps3 = conn.prepareStatement("UPDATE Visitors SET queuesWaitingIn=? , numQueuesIn=? WHERE userName=?");
+						ps3.setString(1, queuesIn);
+						ps3.setInt(2, numQueues);
+						ps3.setString(3, userName);
+						ps3.executeUpdate();
+					}
+				}
+				//add queue
+				else
+				{
+					ps= conn.prepareStatement("SELECT * FROM Visitors WHERE userName=?");
+					ps.setString(1,userName);
+					rs = ps.executeQuery();
+					if(rs.next())
+					{
+						String queuesIn = rs.getString("queuesWaitingIn");
+						int numQueues = rs.getInt("numQueuesIn");
+						numQueues += 1;
+						Vector<String> queue_vector = new Vector<String>(Arrays.asList(queuesIn.split(",")));
+						queue_vector.add(queueName.trim());
+						StringBuilder str = new StringBuilder();
+						for(int i=0;i<queue_vector.size();i++)
+						{
+							if(!queue_vector.get(i).trim().isEmpty())
+							{
+								str.append(queue_vector.get(i).trim());
+								if(i < (queue_vector.size() -1)) str.append(",");
+							}
+						}
+						queuesIn = str.toString();
+						ps3 = conn.prepareStatement("UPDATE Visitors SET queuesWaitingIn=? , numQueuesIn=? WHERE userName=?");
+						ps3.setString(1, queuesIn);
+						ps3.setInt(2, numQueues);
+						ps3.setString(3, userName);
+						ps3.executeUpdate();
+					}
+				}
 
-			}	
-			catch(SQLException e)	
-			 {	
-				 System.out.println(e.getMessage());	
-			 } 	
-			 finally 	
-			 {	
-				try 	
-				{	
-					 if(rs != null) rs.close();	
-					 if(rs2 != null) rs2.close();	
-					 if(ps != null) ps.close();	
-					 if(ps2 != null) ps2.close();	
-					 if(ps3 != null) ps3.close();	
-					 if (conn != null) conn.close();	
-				 } 	
-				 catch (SQLException sqle) 	
-				 {	
-					 System.out.println(sqle.getMessage());	
-				 }	
-			 }	
-		}	
-	}	
+			}
+			catch(SQLException e)
+			 {
+				 System.out.println(e.getMessage());
+			 }
+			 finally
+			 {
+				try
+				{
+					 if(rs != null) rs.close();
+					 if(rs2 != null) rs2.close();
+					 if(ps != null) ps.close();
+					 if(ps2 != null) ps2.close();
+					 if(ps3 != null) ps3.close();
+					 if (conn != null) conn.close();
+				 }
+				 catch (SQLException sqle)
+				 {
+					 System.out.println(sqle.getMessage());
+				 }
+			 }
+		}
+	}
 }
-}
+
