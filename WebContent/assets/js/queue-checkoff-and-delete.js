@@ -1,10 +1,11 @@
 /*
-       document : queue-checkoff.js
+       document : queue-checkoff-and-delete.js
      created on : 2019 december 2, 18:23 pm (monday)
          author : audrey bongalon
       USC email : bongalon@usc.edu
          USC ID : 9152272619
     description : csci201 final project - js for checking someone off the queue
+                                          or deleting an entire queue
 
 
                                       88
@@ -21,8 +22,8 @@
 
 
 $(document).ready(() => {
-    createHiddenForm();
-    connectButtonToForm();
+    createHiddenForms();
+    connectButtonsToForms();
 });
 
 
@@ -30,7 +31,7 @@ $(document).ready(() => {
 
 // creates a form not visible to user that will be submitted upon clicking
 // the logout button
-function createHiddenForm() {
+function createHiddenForms() {
     $("body").append(
         $("<form>").attr({
             id: "checkoff-form",
@@ -51,14 +52,24 @@ function createHiddenForm() {
             })
         ])
     );
+
+    $("#delete-queue-form").prepend(
+        $("<input>").attr({
+            id: "delete-queue-form-input",
+            type: "text",
+            name: "queueToDelete",
+            value: null
+        }).css("display", "none")
+    );
 }
 
 
 
 
 // makes it so that the form submits when you click the button
-function connectButtonToForm() {
-    // DONT USE ARROW FUNCTIONS, or "this" wont bind properly!
+function connectButtonsToForms() {
+    /* DONT USE ARROW FUNCTIONS, or "this" wont bind properly!*/
+
     $(".remove-user-button").click(function() {
         const queueName = $(this).attr("data-queue-name");
         const userToRemove = $(this).attr("data-username");
@@ -67,6 +78,14 @@ function connectButtonToForm() {
         $("#queue-name-form-input").attr("queueName", queueName);
         $("#username-form-input").attr("userToRemove", userToRemove);
         $("#checkoff-form").submit();
+    });
+
+
+    $(".delete-queue-open-modal").click(function() {
+        // when user clicks button to open modal, put queue name in header
+        const queueName = $(this).attr("data-queue-name");
+        $("#delete-modal-queue-name").html(queueName);
+        $("#delete-queue-form-input").val(queueName);
     });
 }
 

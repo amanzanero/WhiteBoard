@@ -102,6 +102,10 @@
 										%>
 									</ul>
 								</div>
+								<button type="button" class="btn btn-link btn-xs delete-queue-open-modal"
+										data-toggle="modal" data-target="#delete-queue-modal" data-queue-name="<%= queue %>">
+									<i class="text-muted">Delete Queue</i>
+								</button>
 							</div>
 						</div>
 						<%
@@ -125,6 +129,7 @@
 
 	</div>
 
+	<!-- for creating a queue -->
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 		 aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -144,8 +149,33 @@
 						<div class="form-group">
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
 								<button type="submit" class="btn btn-primary">Create</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- for deleting a queue -->
+	<div class="modal fade" id="delete-queue-modal" tabindex="-1" role="dialog" aria-labelledby="delete-queue-label"
+		 aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="delete-queue-label">Are you sure you want to delete queue "<span id="delete-modal-queue-name"></span>"?</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="delete-queue-form" method="post" action="CheckoffUserQueue">
+						<div class="form-group">
+							<p>This action cannot be undone.</p>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
+								<button type="submit" class="btn btn-primary btn-danger">Delete Queue</button>
 							</div>
 						</div>
 					</form>
@@ -157,6 +187,7 @@
 	<script type="text/javascript" src="assets/js/jquery-3.3.1.slim.min.js"></script>
 	<script type="text/javascript" src="assets/js/popper.min.js"></script>
 	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="assets/js/queue-checkoff.js"></script>
+	<script type="text/javascript" src="assets/js/queue-checkoff-and-delete.js"></script>
 </body>
 </html>
+
