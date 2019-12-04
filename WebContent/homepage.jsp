@@ -24,7 +24,13 @@
     if (!user.equals("")) loggedIn = true;
 
 	// FAKE DATA FOR QUEUE POPUP
-    Vector<String> queues = DatabaseConnect.getAllQueues();
+   	Vector<String> queues;
+	if(DatabaseConnect.getAllQueues()!=null){
+    	queues = DatabaseConnect.getAllQueues();
+	}
+	else{
+		queues = new Vector<String>();
+	}
 %>
 
 <body>
