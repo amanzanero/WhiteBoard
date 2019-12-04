@@ -27,9 +27,17 @@ $(document).ready(() => {
     /* DONT USE ARROW FUNCTIONS, or "this" wont bind properly!*/
 
     $(".remove-user-button").click(function() {
-        const queueName = $(this).attr("data-queue-name");
-        const userToRemove = $(this).attr("data-username");
+        const $button = $(this);
+
+        // prevent from multiple clicks
+        if ($button.attr("data-removing")) return;
+
+        const queueName = $button.attr("data-queue-name");
+        const userToRemove = $button.attr("data-username");
         console.log(`removing "${userToRemove}" from "${queueName}"`);
+
+        $button.html("Removing...");
+        $button.attr("data-removing", "in-progress");
 
         $.ajax({
             type: "POST",
@@ -40,7 +48,11 @@ $(document).ready(() => {
             },
             success: function(result) {
                 console.log(`successful deletion of ${userToRemove}`);
-                location.reload();
+                $button.parent().addClass("remove-me");
+                $(".remove-me").fadeOut(500, function() {
+                    $button.remove();
+                });
+                // location.reload();
             },
             error: function(result) {
                 alert("error. see console log");
