@@ -80,7 +80,7 @@
 									<button class="btn btn-link" data-toggle="collapse" data-target="#collapse<%=counter %>"
 											aria-expanded="true" aria-controls="collapse<%=counter %>">
 										<%=queue %>
-									</button>
+									</button><button style="float:right" class="btn btn-link">Add Admin</button>
 								</h5>
 							</div>
 
