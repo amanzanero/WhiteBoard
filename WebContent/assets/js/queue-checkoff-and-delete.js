@@ -36,7 +36,7 @@ function createHiddenForms() {
         $("<form>").attr({
             id: "checkoff-form",
             method: "post",
-            action: "Checkoff"
+            action: "CheckoffUserQueue"
         }).css("display", "none").append([
             $("<input>").attr({
                 id: "queue-name-form-input",
