@@ -42,7 +42,7 @@
 					leftLink = "Dashboard";
 					leftHref = "dashboard.jsp";
 					rightLink = "Log Out";
-					rightHref = "logout";
+					rightHref = "Logout";
 				}
 				else {
 					leftLink = "Login";
