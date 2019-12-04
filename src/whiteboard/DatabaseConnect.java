@@ -841,5 +841,52 @@ public class DatabaseConnect {
 			 }
 		}
 	}
+
+	public static void deleteQueue(String queueName)
+	{	
+		String queueString = getQueueString(queueName);
+		Vector<String> queue_vector = new Vector<String>(Arrays.asList(queueString.split(",")));
+		//takes cares and updates each visitor in the queue 
+		for(int i=0; i<queue_vector.size();i++)
+		{
+			String tempVisitor = queue_vector.get(i).trim();
+			if(!tempVisitor.isEmpty())
+			{
+				updateVisitorQueueInfo(tempVisitor, queueName, 1);
+			}
+		}
+
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+	
+		try
+		{
+			conn = createConn();
+			ps = conn.prepareStatement("DELETE FROM Queues WHERE queueName=? ");
+			ps.setString(1, queueName);
+			ps.executeUpdate();
+	
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		finally
+		{
+			try
+			{
+				 if(rs != null) rs.close();
+				 if(ps != null) ps.close();
+				 if (conn != null) conn.close();
+			 }
+			 catch (SQLException sqle)
+			 {
+				 System.out.println(sqle.getMessage());
+			 }
+		}		
+
+
+	}
 }
 
