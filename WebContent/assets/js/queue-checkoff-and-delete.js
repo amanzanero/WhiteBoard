@@ -22,52 +22,8 @@
 
 
 $(document).ready(() => {
-    createHiddenForms();
-    connectButtonsToForms();
-});
+    let queueToDelete;
 
-
-
-
-// creates a form not visible to user that will be submitted upon clicking
-// the logout button
-function createHiddenForms() {
-    $("body").append(
-        $("<form>").attr({
-            id: "checkoff-form",
-            method: "post",
-            action: "CheckoffUserQueue"
-        }).css("display", "none").append([
-            $("<input>").attr({
-                id: "queue-name-form-input",
-                type: "text",
-                name: "queueName",
-                value: null
-            }),
-            $("<input>").attr({
-                id: "username-form-input",
-                type: "text",
-                name: "userToRemove",
-                value: null
-            })
-        ])
-    );
-
-    $("#delete-queue-form").prepend(
-        $("<input>").attr({
-            id: "delete-queue-form-input",
-            type: "text",
-            name: "queueToDelete",
-            value: null
-        }).css("display", "none")
-    );
-}
-
-
-
-
-// makes it so that the form submits when you click the button
-function connectButtonsToForms() {
     /* DONT USE ARROW FUNCTIONS, or "this" wont bind properly!*/
 
     $(".remove-user-button").click(function() {
@@ -75,17 +31,38 @@ function connectButtonsToForms() {
         const userToRemove = $(this).attr("data-username");
         console.log(`removing "${userToRemove}" from "${queueName}"`);
 
-        $("#queue-name-form-input").attr("queueName", queueName);
-        $("#username-form-input").attr("userToRemove", userToRemove);
-        $("#checkoff-form").submit();
+        $.ajax({
+            url: "CheckoffUserQueue",
+            async: false,
+            data: {
+                queueName: queueName,
+                userToRemove: userToRemove
+            },
+            success: function(result) {
+                console.log(result);
+            }
+        });
     });
 
 
     $(".delete-queue-open-modal").click(function() {
         // when user clicks button to open modal, put queue name in header
-        const queueName = $(this).attr("data-queue-name");
-        $("#delete-modal-queue-name").html(queueName);
-        $("#delete-queue-form-input").val(queueName);
+        queueToDelete = $(this).attr("data-queue-name");
+        $("#delete-modal-queue-name").html(queueToDelete);
     });
-}
+
+    $("#delete-queue-button").click(function() {
+        console.log(`deleting queue ${queueToDelete}`)
+        $.ajax({
+            url: "CheckoffUserQueue",
+            async: false,
+            data: {
+                queueToDelete: queueToDelete,
+            },
+            success: function(result) {
+                console.log(result);
+            }
+        });
+    });
+});
 
