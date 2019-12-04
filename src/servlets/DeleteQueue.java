@@ -44,7 +44,9 @@ public class DeleteQueue extends HttpServlet {
 	// upon HTML request
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String redirectToMe = "dashboard.jsp";
+		boolean shouldDeleteFromDB = true;
 
+		// get username
         HttpSession session = request.getSession(false);
         String adminUsername = null;
         if (session != null) {
@@ -52,6 +54,29 @@ public class DeleteQueue extends HttpServlet {
         }
         if (adminUsername == null) {	// not "else" because getAttribute() might return null
             System.out.println("attempted to remove user without logging in");
+            shouldDeleteFromDB = false;
+        }
+
+        // get queue name
+        String queueName = request.getParameter("queueToDelete");
+        if (queueName != null) {
+            queueName = queueName.trim();
+            if (queueName.isEmpty()) {
+                queueName = null;
+            }
+        }
+        if (queueName == null) {	// not "else" because getParameter() might return null
+            System.out.println("trying to delete queue, but no queue name was given!");
+            shouldDeleteFromDB = false;
+        }
+
+        if (!DatabaseConnect.isAdmin(adminUsername, queueName)) {
+            System.out.println(adminUsername + " was trying to delete queue\"" + queueName + "\", but is not admin!");
+            shouldDeleteFromDB = false;
+        }
+
+        if (shouldDeleteFromDB) {
+            DatabaseConnect.deleteQueue(queueName);
         }
 
 		// dispatch the results

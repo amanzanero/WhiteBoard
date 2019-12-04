@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/createQueue")
 public class createQueue extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -32,7 +32,7 @@ public class createQueue extends HttpServlet {
 		HttpSession sesh = request.getSession();
 
 		currUser = sesh.getAttribute("username");
-		
+
 		if(currUser!=null) {
 			adminName = currUser.toString();
 		}
@@ -43,20 +43,20 @@ public class createQueue extends HttpServlet {
 				queueName = null;
 			}
 		}
-		
+
 		String goBack = "/dashboard.jsp";
-		
+
 		System.out.println(queueName);
 		if(DatabaseConnect.queueExists(queueName)) {
 			request.setAttribute("alreadyExists", "That queue already exists.");
 		}
-		else {	
+		else {
 			DatabaseConnect.addNewQueue(queueName);
-			if(!DatabaseConnect.alreadyAdmin(adminName, queueName)) {
+			if(!DatabaseConnect.isAdmin(adminName, queueName)) {
 				DatabaseConnect.addAdmintoQueue(adminName, queueName);
 			}
 		}
-		
+
 //		else if(queueName.equals("") ||queueName==null) {
 //			request.setAttribute("", o);
 //		}
@@ -66,7 +66,7 @@ public class createQueue extends HttpServlet {
 		}
 		catch (IOException e) {
 			System.out.println("ERROR: " + e.getMessage());
-		}		
+		}
 	}
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
