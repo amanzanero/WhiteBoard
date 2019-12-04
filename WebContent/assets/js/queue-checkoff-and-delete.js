@@ -39,6 +39,12 @@ $(document).ready(() => {
                 userToRemove: userToRemove
             },
             success: function(result) {
+                console.log(`successful deletion of ${userToRemove}`);
+                location.reload();
+            },
+            error: function(result) {
+                alert("error. see console log");
+                console.log("error");
                 console.log(result);
             }
         });
@@ -60,6 +66,12 @@ $(document).ready(() => {
                 queueToDelete: queueToDelete,
             },
             success: function(result) {
+                console.log(`successful deletion of ${queueToDelete}`);
+                location.reload();
+            },
+            error: function(result) {
+                alert("error. see console log");
+                console.log("error");
                 console.log(result);
             }
         });
