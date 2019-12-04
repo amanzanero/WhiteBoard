@@ -76,7 +76,7 @@ public class DeleteQueue extends HttpServlet {
         }
 
         if (shouldDeleteFromDB) {
-            DatabaseConnect.deleteQueue(queueName);
+//            DatabaseConnect.deleteQueue(queueName);
         }
 
 		// dispatch the results
