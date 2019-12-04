@@ -1,4 +1,4 @@
-package servlets;
+package whiteboard;
 
 import java.util.ArrayList;
 
@@ -17,8 +17,12 @@ public class Queue {
 
 	//reads a string from the SQL database and converts it into a Queue object
 	public static ArrayList<String> parseQueueString(String stringFromDatabase) {
-		String[] names = stringFromDatabase.split(",");
 		ArrayList<String> parsedQueue = new ArrayList<String>();
+
+		if(stringFromDatabase == null) {
+			return parsedQueue;
+		}
+		String[] names = stringFromDatabase.split(",");
 		for (int i=0; i<names.length;i++) {
 			parsedQueue.add(names[i].trim());
 		}
