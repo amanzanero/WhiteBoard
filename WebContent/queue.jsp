@@ -21,7 +21,6 @@
     HttpSession sesh = request.getSession();
     Object u = sesh.getAttribute("username");
     String user = (u != null) ? u.toString() : "";
-
     if (!user.equals("")) loggedIn = true;
 %>
 
@@ -54,14 +53,17 @@
 				Object n = request.getParameter("visitorname");
 				String username = null;
 				if (n != null) username = n.toString();
-
 				/*
 				 * Need to use database manager here to pull users in queue
 				 */
-
-
 				String data = DatabaseConnect.getQueueString(course);
-				Vector<String> data_vector = new Vector<String>(Arrays.asList(data.split(",")));
+				Vector<String> data_vector;
+				if(data == null){
+					data_vector = new Vector<String>(); //creates empty vector so empty message shows
+				}
+				else{
+					data_vector = new Vector<String>(Arrays.asList(data.split(",")));//splits into filled vector
+				}
 			%>
 			<ul class="navbar-nav text-right">
 				<li class="nav-item active">
