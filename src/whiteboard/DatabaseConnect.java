@@ -595,10 +595,14 @@ public class DatabaseConnect {
 			pst = conn.prepareStatement("SELECT * FROM Visitors WHERE userName=? LIMIT 1");
 			pst.setString(1, username);
 			rs = pst.executeQuery();
-			while (rs.next()) {
-				String qs = rs.getString("queuesWaitingIn");
-				String[] queues = qs.split(",");
-				results = new Vector<String>(Arrays.asList(queues));
+			if(!rs.next()) {
+				results = null;
+			}
+			else {
+				rs.beforeFirst();
+				while (rs.next()) {
+					results.add(rs.getString("queueName"));
+				}
 			}
 
 		}catch(SQLException sqle) {
