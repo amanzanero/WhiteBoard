@@ -170,12 +170,12 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form id="delete-queue-form" method="post" action="CheckoffUserQueue">
+					<form>
 						<div class="form-group">
 							<p>This action cannot be undone.</p>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
-								<button type="submit" class="btn btn-primary btn-danger">Delete Queue</button>
+								<button type="submit" class="btn btn-primary btn-danger" id="delete-queue-button">Delete Queue</button>
 							</div>
 						</div>
 					</form>
