@@ -845,17 +845,19 @@ public class DatabaseConnect {
 	public static void deleteQueue(String queueName)
 	{	
 		String queueString = getQueueString(queueName);
-		Vector<String> queue_vector = new Vector<String>(Arrays.asList(queueString.split(",")));
-		//takes cares and updates each visitor in the queue 
-		for(int i=0; i<queue_vector.size();i++)
+		if(queueString!=null)
 		{
-			String tempVisitor = queue_vector.get(i).trim();
-			if(!tempVisitor.isEmpty())
+			Vector<String> queue_vector = new Vector<String>(Arrays.asList(queueString.split(",")));
+			//takes cares and updates each visitor in the queue 
+			for(int i=0; i<queue_vector.size();i++)
 			{
-				updateVisitorQueueInfo(tempVisitor, queueName, 1);
+				String tempVisitor = queue_vector.get(i).trim();
+				if(!tempVisitor.isEmpty())
+				{
+					updateVisitorQueueInfo(tempVisitor, queueName, 1);
+				}
 			}
 		}
-
 		Connection conn = null;
 		PreparedStatement ps = null;
 		PreparedStatement ps2 = null;
