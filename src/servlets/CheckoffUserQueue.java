@@ -48,7 +48,7 @@ public class CheckoffUserQueue extends HttpServlet {
         
         
         try {
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("dashboard.jsp");
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/dashboard.jsp");
 			dispatcher.forward(request, response);
 		}
 		catch (IOException e) {
