@@ -369,7 +369,7 @@ public class DatabaseConnect {
     	}
     }
 
-    public static boolean alreadyAdmin(String adminName, String queueName) {
+    public static boolean isAdmin(String adminName, String queueName) {
     	boolean success = false;
     	if(queueName == null || queueName.isEmpty() || adminName == null ||adminName.isEmpty()) {
     		return false;

@@ -7,7 +7,7 @@ public class Queue {
 	private ArrayList<String> queue;
 	private ArrayList<String> admins;
 	private String queueName;
-	
+
 	//Default Constructor
 	public Queue(String stringFromDatabase, String queueName) {
 		queue = parseQueueString(stringFromDatabase);
@@ -50,9 +50,9 @@ public class Queue {
 		if (queue.indexOf(userID) == -1) {
 			queue.add(userID);
 		}
-		
+
 	}
-	
+
 	//returns true if a user exists in the queue
 	public boolean userInQueue(String username) {
 		if (queue.indexOf(username) != -1) {
@@ -60,12 +60,12 @@ public class Queue {
 		}
 		return false;
 	}
-	
+
 	//returns the queue size
 	public int getQueueSize() {
 		return queue.size();
 	}
-	
+
 	//changes the position of a single user in the queue
 	public void changePosition(String username, int index, String adminName) {
 		if (admins.indexOf(adminName) != -1) {
@@ -77,17 +77,17 @@ public class Queue {
 			}
 		}
 	}
-	
+
 	//returns the index of a user in the queue
 	public int getUsersPlaceInQueue(String username) {
 		return queue.indexOf(username);
 	}
-	
+
 	//
 	public void addAdminToQueue(String adminName) {
 		if (admins.indexOf(adminName) == -1) {
 			admins.add(adminName);
 		}
 	}
-	
+
 }
