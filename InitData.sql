@@ -11,10 +11,10 @@ VALUES
     ("CSCI201", "ttrojan,ttraveler,jbruin"),
     ("CSCI270", "jbruin");
 
-INSERT INTO Users (userName, hashedPass)
+INSERT INTO Users (userName, hashedPass, numQueuesIn, queuesWaitingIn)
 VALUES
-    ("testcp", "password"),
-    ("testcp1", "password");
+    ("testcp", "password", 0, ""),
+    ("testcp1", "password", 0, "");
 
 INSERT INTO Admins (UserID, queueID)
 VALUES 

@@ -12,6 +12,8 @@ CREATE TABLE Visitors(
 CREATE TABLE Users(
 	UserID INT(11) NOT NULL Primary key AUTO_INCREMENT, 
 	userName VARCHAR(255) NOT NULL,
+	numQueuesIn INT not null,
+	queuesWaitingIn Varchar(255) not null,	
 	hashedPass VARCHAR(255) NOT NULL
 );
 

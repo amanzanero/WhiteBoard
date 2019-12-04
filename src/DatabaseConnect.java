@@ -657,5 +657,315 @@ public class DatabaseConnect {
 			terminateConnection(conn,rs,pst);
 		}
 		return results;
+	}
+	
+
+	public static boolean deleteVisitor(String userName)
+	{
+		boolean success = false;
+		
+		if(userName == null || userName.isEmpty())
+		{
+			success=false;
+		}
+		else {
+			Connection conn = null;
+			PreparedStatement ps = null;
+			PreparedStatement ps2 = null;
+			ResultSet rs = null;
+			try
+			{
+				conn = createConn();
+				ps= conn.prepareStatement("SELECT * FROM Visitors WHERE userName=?");
+				ps.setString(1,userName);
+				rs = ps.executeQuery();
+				if(rs.next())
+				{	
+					int queuesInCheck = rs.getInt("numQueuesIn");
+					if(queuesInCheck == 0)
+					{
+						ps2= conn.prepareStatement("DELETE FROM Visitors WHERE userName=?");
+						ps2.setString(1,userName);
+						ps2.executeUpdate();
+						success = true;
+					}
+					else success = false;
+				}
+				else
+				{
+					success= false;
+				}
+			}
+			catch(SQLException e)
+			 {
+				 System.out.println(e.getMessage());
+			 } 
+			 finally 
+			 {
+				try 
+				{
+					 if (rs != null) 
+					 {
+						 rs.close();
+					 }
+					 if (ps != null) 
+					 {
+						 ps.close();
+					 }
+					 if (ps2 != null) 
+					 {
+						 ps2.close();
+					 }
+					 if (conn != null) 
+					 {
+						 conn.close();
+					 }
+				 } 
+				 catch (SQLException sqle) 
+				 {
+					 System.out.println(sqle.getMessage());
+				 }
+			 }
+		}
+		
+		return success==true?true:false;
+	
+	}
+
+	/*
+		int Option is used to determine if we're adding or removing queues for a visitor
+		Only two options 1 & 2
+		1: Remove queue
+		2: Add queue
+	*/
+	public static void updateVisitorQueueInfo(String userName, String queueName, int option)
+	{
+		if(userName == null || userName.isEmpty())
+		{
+			return;
+		}
+		else {
+			Connection conn = null;
+			PreparedStatement ps = null;
+			PreparedStatement ps2 = null;
+			PreparedStatement ps3 = null;
+			ResultSet rs = null;
+			ResultSet rs2 = null;
+			try
+			{
+				conn = createConn();
+				//remove queue
+				if(option == 1)
+				{
+					ps= conn.prepareStatement("SELECT * FROM Visitors WHERE userName=?");
+					ps.setString(1,userName); 
+					rs = ps.executeQuery();
+					if(rs.next())
+					{
+						String queuesIn = rs.getString("queuesWaitingIn");
+						int numQueues = rs.getInt("numQueuesIn");
+						numQueues -= 1;
+						Vector<String> queue_vector = new Vector<String>(Arrays.asList(queuesIn.split(",")));
+						int index = queue_vector.indexOf(queueName);
+						queue_vector.remove(index);
+						StringBuilder str = new StringBuilder();
+						for(int i=0;i<queue_vector.size();i++)
+						{
+							str.append(queue_vector.get(i).trim());
+							if(i < (queue_vector.size() -1)) str.append(",");
+						}
+						queuesIn = str.length()==0?"":str.toString();
+						ps3 = conn.prepareStatement("UPDATE Visitors SET queuesWaitingIn=? , numQueuesIn=? WHERE userName=?");
+						ps3.setString(1, queuesIn);
+						ps3.setInt(2, numQueues);
+						ps3.setString(3, userName);
+						ps3.executeUpdate();	
+					}
+				}
+				//add queue
+				else
+				{
+					ps= conn.prepareStatement("SELECT * FROM Visitors WHERE userName=?");
+					ps.setString(1,userName); 
+					rs = ps.executeQuery();
+					if(rs.next())
+					{
+						String queuesIn = rs.getString("queuesWaitingIn");
+						int numQueues = rs.getInt("numQueuesIn");
+						numQueues += 1;
+						Vector<String> queue_vector = new Vector<String>(Arrays.asList(queuesIn.split(",")));
+						queue_vector.add(queueName.trim());
+						StringBuilder str = new StringBuilder();
+						for(int i=0;i<queue_vector.size();i++)
+						{
+							if(!queue_vector.get(i).trim().isEmpty())
+							{
+								str.append(queue_vector.get(i).trim());
+								if(i < (queue_vector.size() -1)) str.append(",");
+							}
+						}
+						queuesIn = str.toString();
+						ps3 = conn.prepareStatement("UPDATE Visitors SET queuesWaitingIn=? , numQueuesIn=? WHERE userName=?");
+						ps3.setString(1, queuesIn);
+						ps3.setInt(2, numQueues);
+						ps3.setString(3, userName);
+						ps3.executeUpdate();	
+					}
+				}
+				
+			}
+			catch(SQLException e)
+			 {
+				 System.out.println(e.getMessage());
+			 } 
+			 finally 
+			 {
+				try 
+				{
+					 if(rs != null) rs.close();
+					 if(rs2 != null) rs2.close();
+					 if(ps != null) ps.close();
+					 if(ps2 != null) ps2.close();
+					 if(ps3 != null) ps3.close();
+					 if (conn != null) conn.close();
+				 } 
+				 catch (SQLException sqle) 
+				 {
+					 System.out.println(sqle.getMessage());
+				 }
+			 }
+		}
+	}
+
+	/*
+		int Option is used to determine if we're adding or removing queues for a visitor
+		Only two options 1 & 2
+		1: Remove queue
+		2: Add queue
+	*/
+	public static void updateUserQueueInfo(String userName, String queueName, int option)
+	{
+		if(userName == null || userName.isEmpty())
+		{
+			return;
+		}
+		else {
+			Connection conn = null;
+			PreparedStatement ps = null;
+			PreparedStatement ps2 = null;
+			PreparedStatement ps3 = null;
+			ResultSet rs = null;
+			ResultSet rs2 = null;
+			try
+			{
+				conn = createConn();
+				//remove queue
+				if(option == 1)
+				{
+					ps= conn.prepareStatement("SELECT * FROM Users WHERE userName=?");
+					ps.setString(1,userName); 
+					rs = ps.executeQuery();
+					if(rs.next())
+					{
+						String queuesIn = rs.getString("queuesWaitingIn");
+						int numQueues = rs.getInt("numQueuesIn");
+						numQueues -= 1;
+						Vector<String> queue_vector = new Vector<String>(Arrays.asList(queuesIn.split(",")));
+						int index = queue_vector.indexOf(queueName);
+						queue_vector.remove(index);
+						StringBuilder str = new StringBuilder();
+						for(int i=0;i<queue_vector.size();i++)
+						{
+							str.append(queue_vector.get(i).trim());
+							if(i < (queue_vector.size() -1)) str.append(",");
+						}
+						queuesIn = str.length()==0?"":str.toString();
+						
+						ps3 = conn.prepareStatement("UPDATE Users SET queuesWaitingIn=? , numQueuesIn=? WHERE userName=?");
+						ps3.setString(1, queuesIn);
+						ps3.setInt(2, numQueues);
+						ps3.setString(3, userName);
+						ps3.executeUpdate();	
+					}
+				}
+				//add queue
+				else
+				{
+					ps= conn.prepareStatement("SELECT * FROM Users WHERE userName=?");
+					ps.setString(1,userName); 
+					rs = ps.executeQuery();
+					if(rs.next())
+					{
+						String queuesIn = rs.getString("queuesWaitingIn");
+						int numQueues = rs.getInt("numQueuesIn");
+						numQueues += 1;
+						Vector<String> queue_vector = new Vector<String>(Arrays.asList(queuesIn.split(",")));
+						queue_vector.add(queueName.trim());
+						StringBuilder str = new StringBuilder();
+						for(int i=0;i<queue_vector.size();i++)
+						{
+							if(!queue_vector.get(i).trim().isEmpty())
+							{
+								str.append(queue_vector.get(i).trim());
+								if(i < (queue_vector.size() -1)) str.append(",");
+							}
+						}
+						queuesIn = str.toString();
+						ps3 = conn.prepareStatement("UPDATE Users SET queuesWaitingIn=? , numQueuesIn=? WHERE userName=?");
+						ps3.setString(1, queuesIn);
+						ps3.setInt(2, numQueues);
+						ps3.setString(3, userName);
+						ps3.executeUpdate();	
+					}
+				}
+				
+			}
+			catch(SQLException e)
+			 {
+				 System.out.println(e.getMessage());
+			 } 
+			 finally 
+			 {
+				try 
+				{
+					 if(rs != null) rs.close();
+					 if(rs2 != null) rs2.close();
+					 if(ps != null) ps.close();
+					 if(ps2 != null) ps2.close();
+					 if(ps3 != null) ps3.close();
+					 if (conn != null) conn.close();
+				 } 
+				 catch (SQLException sqle) 
+				 {
+					 System.out.println(sqle.getMessage());
+				 }
+			 }
+		}
+	}
+	
+	public static Vector<String> getUsersQueuesIn(String username) {
+    	Connection conn = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		Vector<String> results = new Vector<String>();
+		try {
+			conn = createConn();
+			pst = conn.prepareStatement("SELECT * FROM Users WHERE userName=? LIMIT 1");
+			pst.setString(1, username);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				String qs = rs.getString("queuesWaitingIn");
+				String[] queues = qs.split(",");
+				results = new Vector<String>(Arrays.asList(queues));
+			}
+			
+		}catch(SQLException sqle) {
+			System.out.println(sqle.getMessage());
+		}finally {
+			terminateConnection(conn,rs,pst);
+		}
+		return results;
     }
+
+
 }
