@@ -34,7 +34,6 @@ $(document).ready(() => {
         $.ajax({
             type: "POST",
             url: "CheckoffUserQueue",
-            async: false,
             data: {
                 queueName: queueName,
                 userToRemove: userToRemove
@@ -57,7 +56,6 @@ $(document).ready(() => {
         $.ajax({
             type: "POST",
             url: "CheckoffUserQueue",
-            async: false,
             data: {
                 queueToDelete: queueToDelete,
             },
