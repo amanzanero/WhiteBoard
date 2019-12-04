@@ -31,30 +31,20 @@ public class CheckoffUserQueue extends HttpServlet {
         String personToRemove = request.getParameter("userToRemove");
         String queueToUpdate = request.getParameter("queueName");
         
-        //checks if person is an admin; do not want to delete a user
-        if(DatabaseConnect.checkIfUserExists(personToRemove))
-        {
-            Vector<String> personQueues = DatabaseConnect.getUsersQueuesIn(personToRemove);
-            removePersonFromQueue(personQueues, queueToUpdate, personToRemove);
-            DatabaseConnect.updateUserQueueInfo(personToRemove, queueToUpdate, 1);
+        Vector<String> personQueues = DatabaseConnect.getVisitorQueues(personToRemove);
+        //visitor is only in one queue 
+        if(personQueues.size() == 1)
+        {          
+            removePersonFromQueue(personQueues, queueToUpdate,personToRemove);
+            DatabaseConnect.deleteVisitor(personToRemove);
         }
-        //not an admin      
         else
         {
-            Vector<String> personQueues = DatabaseConnect.getVisitorQueues(personToRemove);
-            //visitor is only in one queue 
-            if(personQueues.size() == 1)
-            {          
-               removePersonFromQueue(personQueues, queueToUpdate,personToRemove);
-               DatabaseConnect.deleteVisitor(personToRemove);
-            }
-            else
-            {
-                removePersonFromQueue(personQueues, queueToUpdate, personToRemove);
-                DatabaseConnect.updateVisitorQueueInfo(personToRemove, queueToUpdate, 1);
-            }
-
+            removePersonFromQueue(personQueues, queueToUpdate, personToRemove);
+            DatabaseConnect.updateVisitorQueueInfo(personToRemove, queueToUpdate, 1);
         }
+
+        
         
         
         try {
