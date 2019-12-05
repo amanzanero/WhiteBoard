@@ -26,6 +26,7 @@ public class createQueue extends HttpServlet {
     }
 
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String redirectToMe = "dashboard.jsp";
 		String queueName = null;
 		String adminName = null;
 		Object currUser = null;
@@ -61,8 +62,9 @@ public class createQueue extends HttpServlet {
 //			request.setAttribute("", o);
 //		}
 		try {
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(goBack);
-			dispatcher.forward(request, response);
+//			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(goBack);
+//			dispatcher.forward(request, response);
+			response.sendRedirect(redirectToMe);
 		}
 		catch (IOException e) {
 			System.out.println("ERROR: " + e.getMessage());
