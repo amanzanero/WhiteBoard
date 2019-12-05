@@ -27,10 +27,8 @@ public class AddAdminToQueue extends HttpServlet {
     {
       String queueToUpdate = request.getParameter("queueName");
       String userToAdd = request.getParameter("adminName");
-      System.out.println("Adding User:" + userToAdd + " to Queue:" + queueToUpdate);
       if(DatabaseConnect.checkIfUserExists(userToAdd))
       {
-        System.out.println("is Admin already?: " + DatabaseConnect.isAdminofQueue(queueToUpdate, userToAdd) );
         if(!DatabaseConnect.isAdminofQueue(queueToUpdate, userToAdd)) DatabaseConnect.addAdmintoQueue(userToAdd, queueToUpdate);	
       }
       try {
