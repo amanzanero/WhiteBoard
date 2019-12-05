@@ -586,32 +586,28 @@ public class DatabaseConnect {
 	}
 
     public static Vector<String> getVisitorQueues(String username) {
+    	
     	Connection conn = null;
-		PreparedStatement pst = null;
-		ResultSet rs = null;
-		Vector<String> results = new Vector<String>();
-		try {
-			conn = createConn();
-			pst = conn.prepareStatement("SELECT * FROM Visitors WHERE userName=? LIMIT 1");
-			pst.setString(1, username);
-			rs = pst.executeQuery();
-			if(!rs.next()) {
-				results = null;
-			}
-			else {
-				rs.beforeFirst();
-				while (rs.next()) {
-					results.add(rs.getString("queueName"));
-				}
-			}
-
-		}catch(SQLException sqle) {
-			System.out.println(sqle.getMessage());
-		}finally {
-			terminateConnection(conn,rs,pst);
+	PreparedStatement pst = null;
+	ResultSet rs = null;
+	Vector<String> results = new Vector<String>();
+	try {
+		conn = createConn();
+		pst = conn.prepareStatement("SELECT * FROM Visitors WHERE userName=? LIMIT 1");
+		pst.setString(1, username);
+		rs = pst.executeQuery();
+		while (rs.next()) {
+			String qs = rs.getString("queuesWaitingIn");
+			String[] queues = qs.split(",");
+			results = new Vector<String>(Arrays.asList(queues));
 		}
-		return results;
-    }
+	}catch(SQLException sqle) {
+		System.out.println(sqle.getMessage());
+	}finally {
+		terminateConnection(conn,rs,pst);
+	}
+	return results;
+   }
 
     public static void addVisitor(String visitor_name, String queue_name) {
     	Connection conn = null;
