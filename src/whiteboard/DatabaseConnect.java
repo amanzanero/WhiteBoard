@@ -855,6 +855,7 @@ public class DatabaseConnect {
 				if(!tempVisitor.isEmpty())
 				{
 					updateVisitorQueueInfo(tempVisitor, queueName, 1);
+					deleteVisitor(tempVisitor);
 				}
 			}
 		}
