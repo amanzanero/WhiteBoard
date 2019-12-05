@@ -111,7 +111,7 @@ public class Register extends HttpServlet {
 
 		if (canRegister) {
 			// username as salt
-			DatabaseConnect.createUser(username, SHA256.hash(username + password));
+			DatabaseConnect.createUser(username, PBKDF2.hashPBKDF2(password, username));
 
 			// if there's an old session, end it
             HttpSession oldSession = request.getSession(false);
