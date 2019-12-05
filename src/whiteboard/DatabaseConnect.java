@@ -907,5 +907,63 @@ public class DatabaseConnect {
 
 
 	}
+
+	public static boolean isAdminofQueue(String queueName, String userName)
+	{
+		boolean success = false;
+		Connection conn = null;
+		PreparedStatement ps = null;
+		PreparedStatement ps2 = null;
+		PreparedStatement ps3 = null;
+		ResultSet rs = null;
+		ResultSet rs2 = null;
+		ResultSet rs3 = null;
+	
+		try
+		{
+			conn = createConn();
+			ps = conn.prepareStatement("SELECT * FROM Users WHERE userName=?");
+			ps.setString(1, userName);
+			rs = ps.executeQuery();
+			if(rs.next())
+			{
+				int userID = rs.getInt("UserID");
+				ps2 = conn.prepareStatement("SELECT* FROM Queues WHERE queueName=?");
+				ps2.setString(1, queueName);
+				rs2 = ps2.executeQuery();
+				if(rs2.next())
+				{
+					int queueID = rs2.getInt("queueID");
+					ps3 = conn.prepareStatement("SELECT* FROM Admins WHERE queueID=? AND UserID=?");
+					ps3.setInt(1, queueID);
+					ps3.setInt(2, userID);
+					rs3 =ps3.executeQuery();
+					if(rs3.next()) success = true;
+				}
+			}
+		}
+		catch(SQLException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		finally
+		{
+			try
+			{
+				if(rs != null) rs.close();
+				if(rs2 != null) rs2.close();
+				if(rs3 != null) rs3.close();
+				if(ps != null) ps.close();
+				if(ps2 != null) ps2.close();
+				if(ps3 != null) ps3.close();
+				if (conn != null) conn.close();
+			 }
+			 catch (SQLException sqle)
+			 {
+				 System.out.println(sqle.getMessage());
+			 }
+		}	
+		return success;
+	}
 }
 
