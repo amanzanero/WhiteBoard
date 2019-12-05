@@ -13,10 +13,10 @@ import java.util.Vector;
 public class DatabaseConnect {
 	private DatabaseConnect() {}
     private static String SQL_database_name = "WhiteBoard";
-	private static String SQL_instance_name = "whiteboard-258101:us-central1:whiteboard";
+	private static String SQL_instance_name = "";
 	private static String SQL_user = "root";
-	private static String SQL_user_password = "Usc2019!";
-	private static String SQL_Connection = "jdbc:mysql://google/";
+	private static String SQL_user_password = "5997";
+	private static String SQL_Connection = "jdbc:mysql://localhost:3306/";
 
 	private static Connection createConn() {
 		try {

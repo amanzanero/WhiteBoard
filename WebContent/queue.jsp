@@ -2,7 +2,7 @@
 <%@ page import="whiteboard.DatabaseConnect" %>
 <%@ page import="java.util.Vector" %>
 <%@ page import="java.util.Arrays" %>
-<%@ page import="java.net.URLEncoder" %>
+<%@ page import="java.net.URLDecoder" %>
 <%@ page import="java.nio.charset.StandardCharsets" %>
 
 <!DOCTYPE html>
@@ -53,7 +53,7 @@
 					rightHref = "register.jsp";
 				}
 				String course = request.getParameter("course");
-				course = URLDecoder.decode(course, StandardCharsets.UTF_8.toString())
+				course = URLDecoder.decode(course, StandardCharsets.UTF_8.toString());
 				Object n = request.getParameter("visitorname");
 				String username = null;
 				if (n != null) username = n.toString();

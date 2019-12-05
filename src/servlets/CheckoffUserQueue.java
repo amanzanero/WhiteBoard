@@ -36,6 +36,7 @@ public class CheckoffUserQueue extends HttpServlet {
         if(personQueues.size() == 1)
         {          
             removePersonFromQueue(personQueues, queueToUpdate,personToRemove);
+            DatabaseConnect.updateVisitorQueueInfo(personToRemove, queueToUpdate, 1);
             DatabaseConnect.deleteVisitor(personToRemove);
         }
         else
