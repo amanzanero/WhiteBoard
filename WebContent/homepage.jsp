@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="whiteboard.DatabaseConnect" %>
 <%@ page import="java.util.Vector" %>
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="java.nio.charset.StandardCharsets" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -142,7 +144,7 @@
             <ul class="list-group">
                 <%
                     for (String q : queues) {
-                        String link = "queue.jsp?course=" + q;
+                        String link = "queue.jsp?course=" + URLEncoder.encode(q, StandardCharsets.UTF_8.toString());;
                 %>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <%= q %>
