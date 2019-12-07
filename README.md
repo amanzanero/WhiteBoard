@@ -12,12 +12,12 @@ Group Name: WhiteBoard
 
 
 ## Names and Emails:
-Audrey Bongalon (bongalon@usc.edu)<br/><br/>
+Audrey Bongalon <br/><br/>
 Angel Flores (angelflo@usc.edu)<br/>
-Joses Galdamez (jgaldame@usc.edu)<br/>
-Steven Hernandez (hernansj@usc.edu)<br/>
-Andrew Manzanero (amanzane@usc.edu)<br/>
-Brian Sitenga (sitenga@usc.edu)<br/>
+Joses Galdamez <br/>
+Steven Hernandez <br/>
+Andrew Manzanero <br/>
+Brian Sitenga <br/>
 
 
 
