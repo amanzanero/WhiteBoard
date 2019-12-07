@@ -12,8 +12,8 @@ Group Name: WhiteBoard
 
 
 ## Names and Emails:
-Audrey Bongalon <br/><br/>
-Angel Flores (angelflo@usc.edu)<br/>
+Audrey Bongalon <br/>
+Angel Flores <br/>
 Joses Galdamez <br/>
 Steven Hernandez <br/>
 Andrew Manzanero <br/>
