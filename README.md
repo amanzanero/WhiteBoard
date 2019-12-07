@@ -9,19 +9,6 @@ University of Southern California
 Group Name: WhiteBoard
 
 
-
-
-## Names and Emails:
-Audrey Bongalon <br/>
-Angel Flores <br/>
-Joses Galdamez <br/>
-Steven Hernandez <br/>
-Andrew Manzanero <br/>
-Brian Sitenga <br/>
-
-
-
-
 ## Description:
 WhiteBoard is a web application that creates a live queue for users to join. For
 example, SAL can become very packed during midterms and finals season, and it
